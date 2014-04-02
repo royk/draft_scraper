@@ -16,7 +16,7 @@ Browser.drive {
 /*
     for (pack=1; pack<4; pack++) {
         i = 0;
-        for (pick=1; pick<9; pick++) {
+        for (pick=1; pick<16; pick++) {
             for (player=1; player<9; player++) {
                 go "http://gatherer.wizards.com/magic/draftools/draftviewer.asp?draftid=08_01_2013_1&player="+player+"&pack="+pack+"&pick="+pick+"&showpick=true"
                 draft.picks[pack-1][i] = $(".pickedcarddiv .cardlink img").@src;
