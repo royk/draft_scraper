@@ -4,6 +4,7 @@ import groovy.lang.Binding;
 import groovy.lang.GroovyClassLoader;
 import groovy.lang.GroovyObject;
 import groovy.util.GroovyScriptEngine;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import spark.*;
 
 import java.io.File;
@@ -23,9 +24,12 @@ public class Main {
                     Binding binding = new Binding();
                     binding.setVariable("input", "world");
                     gse.run("src/main/groovy/script/scrape.groovy", binding);
-                    output = binding.getVariable("output").toString();
+                    Object outputObj = binding.getVariable("output");
+                    if (outputObj!=null) {
+                        output = outputObj.toString();
+                    }
                 } catch(Exception e) {
-                    output = "unknown error: "+e.getMessage();
+                    output = "unknown error: "+ ExceptionUtils.getStackTrace(e);
                 }
                 return output;
             }
