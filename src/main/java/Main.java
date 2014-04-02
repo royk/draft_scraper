@@ -6,15 +6,18 @@ import groovy.lang.GroovyObject;
 import groovy.util.GroovyScriptEngine;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import spark.*;
+import spark.template.freemarker.FreeMarkerRoute;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        get(new Route("/view") {
+        get(new FreeMarkerRoute("/view") {
             @Override
             public Object handle(Request request, Response response) {
                 String output = "";
@@ -31,7 +34,9 @@ public class Main {
                 } catch(Exception e) {
                     output = "unknown error: "+ ExceptionUtils.getStackTrace(e);
                 }
-                return output;
+                Map<String, Object> attributes = new HashMap<String, Object>();
+                attributes.put("output", output);
+                return modelAndView(attributes, "view.ftl");
             }
         });
 
