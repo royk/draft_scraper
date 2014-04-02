@@ -25,14 +25,14 @@ public class Main {
                     String[] roots = new String[] { "." };
                     GroovyScriptEngine gse = new GroovyScriptEngine(roots);
                     Binding binding = new Binding();
-                    binding.setVariable("input", "world");
+                    binding.setVariable("baseURL", "http://gatherer.wizards.com/magic/draftools/draftviewer.asp?draftid=08_01_2013_1");
                     gse.run("src/main/groovy/script/scrape.groovy", binding);
                     Object outputObj = binding.getVariable("output");
                     if (outputObj!=null) {
                         output = outputObj.toString();
                     }
                 } catch(Exception e) {
-                    output = "unknown error: "+ ExceptionUtils.getStackTrace(e);
+                    output = "{error: \"unknown error: "+ ExceptionUtils.getStackTrace(e)+"\"}";
                 }
                 Map<String, Object> attributes = new HashMap<String, Object>();
                 attributes.put("output", output);
