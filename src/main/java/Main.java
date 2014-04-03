@@ -14,18 +14,54 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Main {
-
     public static void main(String[] args) {
 
         get(new FreeMarkerRoute("/view") {
             @Override
             public Object handle(Request request, Response response) {
+                return modelAndView(null, "view.ftl");
+            }
+        });
+
+        get(new FreeMarkerRoute("/scrape_view") {
+            @Override
+            public Object handle(Request request, Response response) {
+                return modelAndView(null, "scrape_view.ftl");
+            }
+        });
+
+        get(new Route("/loadSavedDraft") {
+            @Override
+            public Object handle(Request request, Response response) {
+                String draftId = request.queryParams("draftId");
                 String output = "";
                 try {
                     String[] roots = new String[] { "." };
                     GroovyScriptEngine gse = new GroovyScriptEngine(roots);
                     Binding binding = new Binding();
-                    binding.setVariable("baseURL", "http://gatherer.wizards.com/magic/draftools/draftviewer.asp?draftid=08_01_2013_1");
+                    binding.setVariable("draftId", Integer.parseInt(draftId));
+                    gse.run("src/main/groovy/script/savedDrafts.groovy", binding);
+                    Object outputObj = binding.getVariable("output");
+                    if (outputObj!=null) {
+                        output = outputObj.toString();
+                    }
+                } catch(Exception e) {
+                    output = "{error: \"unknown error: "+ ExceptionUtils.getStackTrace(e)+"\"}";
+                }
+                return output;
+            }
+        });
+
+        get(new Route("/scrape") {
+            @Override
+            public Object handle(Request request, Response response) {
+                String baseURL = request.queryParams("url");
+                String output = "";
+                try {
+                    String[] roots = new String[] { "." };
+                    GroovyScriptEngine gse = new GroovyScriptEngine(roots);
+                    Binding binding = new Binding();
+                    binding.setVariable("baseURL", baseURL);
                     gse.run("src/main/groovy/script/scrape.groovy", binding);
                     Object outputObj = binding.getVariable("output");
                     if (outputObj!=null) {
@@ -34,9 +70,7 @@ public class Main {
                 } catch(Exception e) {
                     output = "{error: \"unknown error: "+ ExceptionUtils.getStackTrace(e)+"\"}";
                 }
-                Map<String, Object> attributes = new HashMap<String, Object>();
-                attributes.put("output", output);
-                return modelAndView(attributes, "view.ftl");
+                return output;
             }
         });
 
