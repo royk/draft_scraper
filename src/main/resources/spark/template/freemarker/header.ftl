@@ -2,6 +2,24 @@
 <head>
     <title>Flat Draft Viewer</title>
     <style>
+        #wrap {
+        }
+        .cards-container {
+            margin: 80px 0;
+        }
+        .cards-container img {
+            cursor: pointer;
+        }
+        #footer {
+            height: 60px;
+            background-color: #eeeeee;
+            position: fixed;
+            bottom: 00px;
+            width: 100%;
+        }
+        .credit {
+            margin: 20px 0;
+        }
         .highlight {
             -webkit-box-shadow: 0px 0px 5px 15px rgba(0, 0, 0, 0.75);
             -moz-box-shadow:    0px 0px 5px 15px rgba(0, 0, 0, 0.75);

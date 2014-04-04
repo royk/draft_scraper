@@ -45,70 +45,71 @@
         </ul>
     </div>
 </div>
+<div id="wrap">
+    <div class="container clear-top cards-container" id="cardsContainer">
 
-<div style="margin-top:80px;"/>
-<div class="container" id="cardsContainer">
-
+    </div>
 </div>
+    <script>
+        var activeData = null;
+        var stringData = null;
+        var highlightedPlayer = 1;
+        $(document).ready(function() {
+            $("#draftSelector a").click(function() {
+                var id = $(this).data("id");
+                $.ajax({
+                    type: "GET",
+                    url: "/loadSavedDraft",
+                    data: {
+                        draftId: id
+                    },
+                    success: function(data) {
+                        stringData = data;
+                        data = JSON.parse(data);
+                        activeData = data.picks.data;
+                        $(".draft-control").show();
+                        loadPackData(activeData[0]);
+                        highlightSelectedPlayer();
+                    }
+                });
+            });
+            // draft controls
+            $("#packChooser .dropdown-menu a").click(function() {
+                var packNumber = parseInt($(this).data("id"));
+                $("#packChooser > a > span").text("Pack "+(packNumber+1));
+                loadPackData(activeData[packNumber]);
+                highlightSelectedPlayer();
+            });
+            $("#playerChooser .dropdown-menu a").click(function() {
+                highlightedPlayer = parseInt($(this).data("id"));
 
-<script>
-    var activeData = null;
-    var stringData = null;
-    var highlightedPlayer = 1;
-    $(document).ready(function() {
-        $("#draftSelector a").click(function() {
-            var id = $(this).data("id");
-            $.ajax({
-                type: "GET",
-                url: "/loadSavedDraft",
-                data: {
-                    draftId: id
-                },
-                success: function(data) {
-                    stringData = data;
-                    data = JSON.parse(data);
-                    activeData = data.picks.data;
-                    $(".draft-control").show();
-                    loadPackData(activeData[0]);
-                    highlightSelectedPlayer();
-                }
+                highlightSelectedPlayer();
             });
         });
-        // draft controls
-        $("#packChooser .dropdown-menu a").click(function() {
-            var packNumber = parseInt($(this).data("id"));
-            $("#packChooser > a > span").text("Pack "+(packNumber+1));
-            loadPackData(activeData[packNumber]);
-            highlightSelectedPlayer();
-        });
-        $("#playerChooser .dropdown-menu a").click(function() {
-            highlightedPlayer = parseInt($(this).data("id"));
+        function highlightSelectedPlayer() {
             $("#playerChooser > a > span").text("Player "+highlightedPlayer);
-            highlightSelectedPlayer();
-        });
-    });
-    function highlightSelectedPlayer() {
-        $("#cardsContainer img").removeClass("highlight");
-        $(".player"+highlightedPlayer).addClass("highlight");
-    }
-    function loadPackData(pack) {
-        var offset = 0;
-        var $container = $("#cardsContainer");
-        $container.html("");
-        for (var j=0; j<15; j++) {
-            player = 1;
-            var $div = $container.append("<div></div>");
-            for (var i=0; i<8; i++) {
-                var cardPos = (i+offset)%8;
-                $div.append("<img  data-player='"+(cardPos+1)+"' class='pick"+(j+1)+" player"+(cardPos+1)+"' style='width:120px;' src='"+pack[(cardPos+j*8)]+"'/>");
-            }
-            offset++;
+            $("#cardsContainer img").removeClass("highlight");
+            $(".player"+highlightedPlayer).addClass("highlight");
         }
-        $container.find("img").click(function() {
-            // highlight player that picked this card
-            highlightedPlayer = $(this).data("player");
-            highlightSelectedPlayer();
-        });
-    }
-</script>
+        function loadPackData(pack) {
+            var offset = 0;
+            var $container = $("#cardsContainer");
+            $container.html("");
+            for (var j=0; j<15; j++) {
+                player = 1;
+                var $div = $container.append("<div></div>");
+                for (var i=0; i<8; i++) {
+                    var cardPos = (i+offset)%8;
+                    $div.append("<img  data-player='"+(cardPos+1)+"' class='pick"+(j+1)+" player"+(cardPos+1)+"' style='width:120px;' src='"+pack[(cardPos+j*8)]+"'/>");
+                }
+                offset++;
+            }
+            $container.find("img").click(function() {
+                // highlight player that picked this card
+                highlightedPlayer = $(this).data("player");
+                highlightSelectedPlayer();
+            });
+        }
+    </script>
+
 <#include "footer.ftl">
