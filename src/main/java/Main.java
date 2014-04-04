@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class Main {
     public static void main(String[] args) {
-
+        setPort(80);
         get(new FreeMarkerRoute("/view") {
             @Override
             public Object handle(Request request, Response response) {
