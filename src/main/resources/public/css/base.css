@@ -1,0 +1,23 @@
+#footer {
+    height: 60px;
+    background-color: #eeeeee;
+    position: fixed;
+    bottom: 00px;
+    width: 100%;
+}
+.credit {
+    margin: 20px 0;
+}
+
+.help-container {
+    position: relative;
+}
+.help {
+    position: absolute;
+    text-align: center;
+    display: none;
+    opacity: 0;
+}
+.tooltip-inner {
+    text-align: left !important;
+}

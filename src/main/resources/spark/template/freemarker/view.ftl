@@ -118,11 +118,14 @@
                 var $div = $container.append("<div></div>");
                 for (var i=0; i<8; i++) {
                     var cardPos = (i+offset)%8;
-                    $div.append("<img  data-player='"+(cardPos+1)+"' class='pick"+(j+1)+" player"+(cardPos+1)+"' style='width:"+cardWidth+"px;' src='"+pack[(cardPos+j*8)]+"'/>");
+                    var tooltipText = 'Player '+(cardPos+1)+'<br/>Pick '+(j+1)+'';
+                    $div.append("<img  data-player='"+(cardPos+1)+"' data-toggle='tooltip' title='"+tooltipText+"' class='pick"+(j+1)+" player"+(cardPos+1)+"' style='width:"+cardWidth+"px;' src='"+pack[(cardPos+j*8)]+"'/>");
                 }
                 offset++;
             }
-            $container.find("img").click(function() {
+            var $cards = $container.find("img");
+            $cards.tooltip({placement: "top", html: true});
+            $cards.click(function() {
                 // highlight player that picked this card
                 highlightedPlayer = $(this).data("player");
                 highlightSelectedPlayer();

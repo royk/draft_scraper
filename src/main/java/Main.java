@@ -17,6 +17,7 @@ import java.util.Map;
 public class Main {
     private static String LOCAL_PORT = "4567";
     public static void main(String[] args) {
+        staticFileLocation("/public");
         String port = System.getenv("PORT");
         if (StringUtils.isBlank(port)) {
             port = LOCAL_PORT;
