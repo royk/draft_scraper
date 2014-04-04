@@ -1,11 +1,25 @@
+<#macro header>
 <html>
 <head>
     <title>Flat Draft Viewer</title>
     <style>
         #wrap {
         }
+        .help-container {
+            position: relative;
+        }
+        .help {
+            position: absolute;
+            text-align: center;
+            display: none;
+            opacity: 0;
+        }
+        .start-help {
+            top: 30px;
+        }
         .cards-container {
             margin: 80px 0;
+            padding: 0 !important;
         }
         .cards-container img {
             cursor: pointer;
@@ -55,6 +69,13 @@
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 </head>
 <body>
+</#macro>
+<#macro navbarStart>
 <div class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
         <a class="navbar-brand" href="#">Flat Draft Viewer</a>
+</#macro>
+<#macro navbarEnd>
+    </div>
+</div>
+</#macro>

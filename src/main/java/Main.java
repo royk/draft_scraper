@@ -4,6 +4,7 @@ import groovy.lang.Binding;
 import groovy.lang.GroovyClassLoader;
 import groovy.lang.GroovyObject;
 import groovy.util.GroovyScriptEngine;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import spark.*;
 import spark.template.freemarker.FreeMarkerRoute;
@@ -14,8 +15,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Main {
+    private static String LOCAL_PORT = "4567";
     public static void main(String[] args) {
-        setPort(Integer.parseInt(System.getenv("PORT")));
+        String port = System.getenv("PORT");
+        if (StringUtils.isBlank(port)) {
+            port = LOCAL_PORT;
+        }
+        setPort(Integer.parseInt(port));
         get(new FreeMarkerRoute("/view") {
             @Override
             public Object handle(Request request, Response response) {

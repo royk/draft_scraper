@@ -1,4 +1,6 @@
-<#include "header.ftl">
+<#import "header.ftl" as header/>
+<@header.header/>
+<@header.navbarStart/>
         <ul class="nav navbar-nav">
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -13,6 +15,11 @@
                         <a href="#" data-id="1">Pro Tour Born of the gods, Draft 2, Pod 5, BTT (Feb 2014)</a>
                     </li>
                 </ul>
+                <div class="help-container">
+                    <div id="startHelp" class="start-help help">
+                        <span class="glyphicon glyphicon-arrow-up"></span><br/>Select a draft to start
+                    </div>
+                </div>
             </li>
             <li class="dropdown draft-control" id="packChooser">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -43,19 +50,28 @@
                 </ul>
             </li>
         </ul>
-    </div>
-</div>
+<@header.navbarEnd/>
 <div id="wrap">
     <div class="container clear-top cards-container" id="cardsContainer">
 
     </div>
 </div>
+
     <script>
         var activeData = null;
         var stringData = null;
         var highlightedPlayer = 1;
+        var startHelpNeeded = true;
+        var cardWidth = 120;
         $(document).ready(function() {
+            setTimeout(function() {
+                if (startHelpNeeded) {
+                    $("#startHelp").show().animate({top: "-=20", opacity: 1})
+                }
+            }, 3000);
             $("#draftSelector a").click(function() {
+                startHelpNeeded = false;
+                $("#startHelp").hide();
                 var id = $(this).data("id");
                 $.ajax({
                     type: "GET",
@@ -64,6 +80,7 @@
                         draftId: id
                     },
                     success: function(data) {
+                        $("#startHelp").hide();
                         stringData = data;
                         data = JSON.parse(data);
                         activeData = data.picks.data;
@@ -95,12 +112,13 @@
             var offset = 0;
             var $container = $("#cardsContainer");
             $container.html("");
+            $container.css("width", cardWidth*8+"px");
             for (var j=0; j<15; j++) {
                 player = 1;
                 var $div = $container.append("<div></div>");
                 for (var i=0; i<8; i++) {
                     var cardPos = (i+offset)%8;
-                    $div.append("<img  data-player='"+(cardPos+1)+"' class='pick"+(j+1)+" player"+(cardPos+1)+"' style='width:120px;' src='"+pack[(cardPos+j*8)]+"'/>");
+                    $div.append("<img  data-player='"+(cardPos+1)+"' class='pick"+(j+1)+" player"+(cardPos+1)+"' style='width:"+cardWidth+"px;' src='"+pack[(cardPos+j*8)]+"'/>");
                 }
                 offset++;
             }
