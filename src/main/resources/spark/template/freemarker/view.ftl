@@ -59,11 +59,11 @@
                         Cards Size<br/>
                         <div style="margin-left: 5px;">
                             <label><input type="radio" name="cardSize" value="80"/>Small</label>
-                            <label><input type="radio" name="cardSize" value="120" checked/>Normal</label>
+                            <label><input type="radio" name="cardSize" value="120"/>Normal</label>
                         </div>
                     </li>
                     <li>
-                        <label><input type="checkbox" id="showTooltipCB" checked>Tooltips</label>
+                        <label><input type="checkbox" id="showTooltipCB">Tooltips</label>
                     </li>
                 </ul>
             </li>
@@ -109,22 +109,26 @@
             var stringData = null;
             var highlightedPlayer = 1;
             var startHelpNeeded = true;
-            var cardWidth = 120;
+            var cardWidth = localStorage.getItem('cardWidth') || 120;
             var currentHelpSection = 0;
             var activePackNumber = 0;
-            var showTooltips = true;
+            var showTooltips = localStorage.getItem('showTooltips')==undefined ? true : localStorage.getItem('showTooltips')=="true";
             $(document).ready(function() {
                 setTimeout(function() {
                     if (startHelpNeeded) {
                         $("#startHelp").show().animate({top: "-=20", opacity: 1})
                     }
                 }, 3000);
+                $("input[name=cardSize").filter("[value="+cardWidth+"]").prop("checked", true);
                 $("input[name=cardSize]").change(function() {
                     cardWidth = $(this).val();
+                    localStorage.setItem('cardWidth', cardWidth);
                     loadPackData();
                 });
+                $("#showTooltipCB").attr("checked", showTooltips);
                 $("#showTooltipCB").change(function() {
                     showTooltips = $(this).is(":checked");
+                    localStorage.setItem('showTooltips', showTooltips);
                     loadPackData();
                 });
                 $("#helpButton").click(function() {
