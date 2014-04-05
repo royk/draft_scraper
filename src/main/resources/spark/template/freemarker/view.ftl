@@ -91,7 +91,7 @@
                 is right below the second player's first pick. (i.e., the second card on the second pack's column).
             </div>
             <div id="helpSection4" class="help-section">
-                Below each pick are the cards that were in the pack when the player made his pick. So for each pick,
+                Below each pick are the cards that were in the pack when the player made their pick. So for each pick,
                 you get to see exactly what were the options that were available to the player.
             </div>
             <div id="helpSection5" class="help-section">
