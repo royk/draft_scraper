@@ -52,7 +52,21 @@
         </ul>
         <ul class="nav navbar-nav navbar-right draft-control">
             <li><a href="#" id="helpButton"><span class="glyphicon glyphicon-question-sign"></span></a></li>
-            <li><a href="#" id="settingsButton"><span class="glyphicon glyphicon-cog"></span></a></li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span></a>
+                <ul class="dropdown-menu settings-menu">
+                    <li>
+                        Cards Size<br/>
+                        <div style="margin-left: 5px;">
+                            <label><input type="radio" name="cardSize" value="80"/>Small</label>
+                            <label><input type="radio" name="cardSize" value="120" checked/>Normal</label>
+                        </div>
+                    </li>
+                    <li>
+                        <label><input type="checkbox" id="showTooltipCB" checked>Tooltips</label>
+                    </li>
+                </ul>
+            </li>
         </ul>
 <@header.navbarEnd/>
 <div id="wrap">
@@ -90,116 +104,136 @@
 </div>
 
     <script>
-        var activeData = null;
-        var stringData = null;
-        var highlightedPlayer = 1;
-        var startHelpNeeded = true;
-        var cardWidth = 120;
-        var currentHelpSection = 0;
-        $(document).ready(function() {
-            setTimeout(function() {
-                if (startHelpNeeded) {
-                    $("#startHelp").show().animate({top: "-=20", opacity: 1})
-                }
-            }, 3000);
-            $("#helpButton").click(function() {
-                if (currentHelpSection!==0) return;
-                showNextHelpSection();
-                $("#helpSectionContainer").show().animate({opacity:1});
-            });
-            $("#helpNextButton").click(function() {
-                showNextHelpSection();
-            });
-
-            function showNextHelpSection() {
-                currentHelpSection++;
-                $(".help-section").hide();
-                var nextSection = $("#helpSection"+currentHelpSection);
-                if (nextSection.length) {
-                    $("#helpSection"+currentHelpSection).show();
-                } else {
-                    currentHelpSection = 0;
-                    $("#helpSectionContainer").hide().css("opacity", "0");
-                }
-            }
-
-            $(".column-highlight-button").hover(function() {
-                var column = $(this).data("column");
-                $("#cardsContainer img").removeClass("highlight");
-                $("#cardsContainer img.column"+column).addClass("highlight");
-            });
-            $(".card-highlight-button").hover(function() {
-                var card = $(this).data("card");
-                $("#cardsContainer img").removeClass("highlight");
-                $("#cardsContainer img.card"+card).addClass("highlight");
-            });
-
-
-
-            $("#draftSelector a").click(function() {
-                startHelpNeeded = false;
-                $("#startHelp").hide();
-                var id = $(this).data("id");
-                $.ajax({
-                    type: "GET",
-                    url: "/loadSavedDraft",
-                    data: {
-                        draftId: id
-                    },
-                    success: function(data) {
-                        $("#startHelp").hide();
-                        stringData = data;
-                        data = JSON.parse(data);
-                        activeData = data.picks.data;
-                        $(".draft-control").show();
-                        loadPackData(activeData[0]);
-                        highlightSelectedPlayer();
+        (function() {
+            var activeData = null;
+            var stringData = null;
+            var highlightedPlayer = 1;
+            var startHelpNeeded = true;
+            var cardWidth = 120;
+            var currentHelpSection = 0;
+            var activePackNumber = 0;
+            var showTooltips = true;
+            $(document).ready(function() {
+                setTimeout(function() {
+                    if (startHelpNeeded) {
+                        $("#startHelp").show().animate({top: "-=20", opacity: 1})
                     }
+                }, 3000);
+                $("input[name=cardSize]").change(function() {
+                    cardWidth = $(this).val();
+                    loadPackData();
+                });
+                $("#showTooltipCB").change(function() {
+                    showTooltips = $(this).is(":checked");
+                    loadPackData();
+                });
+                $("#helpButton").click(function() {
+                    if (currentHelpSection!==0) {
+                        currentHelpSection = 0;
+                        $("#helpSectionContainer").hide().css("opacity", "0");
+                        return;
+                    }
+                    showNextHelpSection();
+                    $("#helpSectionContainer").show().animate({opacity:1});
+                });
+                $("#helpNextButton").click(function() {
+                    showNextHelpSection();
+                });
+
+                function showNextHelpSection() {
+                    currentHelpSection++;
+                    $(".help-section").hide();
+                    var nextSection = $("#helpSection"+currentHelpSection);
+                    if (nextSection.length) {
+                        $("#helpSection"+currentHelpSection).show();
+                    } else {
+                        currentHelpSection = 0;
+                        $("#helpSectionContainer").hide().css("opacity", "0");
+                    }
+                }
+
+                $(".column-highlight-button").hover(function() {
+                    var column = $(this).data("column");
+                    $("#cardsContainer img").removeClass("highlight");
+                    $("#cardsContainer img.column"+column).addClass("highlight");
+                });
+                $(".card-highlight-button").hover(function() {
+                    var card = $(this).data("card");
+                    $("#cardsContainer img").removeClass("highlight");
+                    $("#cardsContainer img.card"+card).addClass("highlight");
+                });
+
+
+
+                $("#draftSelector a").click(function() {
+                    startHelpNeeded = false;
+                    $("#startHelp").hide();
+                    var id = $(this).data("id");
+                    $.ajax({
+                        type: "GET",
+                        url: "/loadSavedDraft",
+                        data: {
+                            draftId: id
+                        },
+                        success: function(data) {
+                            $("#startHelp").hide();
+                            stringData = data;
+                            data = JSON.parse(data);
+                            activeData = data.picks.data;
+                            $(".draft-control").show();
+                            activePackNumber = 0;
+                            loadPackData();
+                            highlightSelectedPlayer();
+                        }
+                    });
+                });
+                // draft controls
+                $("#packChooser .dropdown-menu a").click(function() {
+                    activePackNumber = parseInt($(this).data("id"));
+                    $("#packChooser > a > span").text("Pack "+(activePackNumber+1));
+                    loadPackData();
+                    highlightSelectedPlayer();
+                });
+                $("#playerChooser .dropdown-menu a").click(function() {
+                    highlightedPlayer = parseInt($(this).data("id"));
+
+                    highlightSelectedPlayer();
                 });
             });
-            // draft controls
-            $("#packChooser .dropdown-menu a").click(function() {
-                var packNumber = parseInt($(this).data("id"));
-                $("#packChooser > a > span").text("Pack "+(packNumber+1));
-                loadPackData(activeData[packNumber]);
-                highlightSelectedPlayer();
-            });
-            $("#playerChooser .dropdown-menu a").click(function() {
-                highlightedPlayer = parseInt($(this).data("id"));
-
-                highlightSelectedPlayer();
-            });
-        });
-        function highlightSelectedPlayer() {
-            $("#playerChooser > a > span").text("Player "+highlightedPlayer);
-            $("#cardsContainer img").removeClass("highlight");
-            $(".player"+highlightedPlayer).addClass("highlight");
-        }
-        function loadPackData(pack) {
-            var offset = 0;
-            var $container = $("#cardsContainer");
-            $container.html("");
-            $container.css("width", cardWidth*8+"px");
-            var card = 0;
-            for (var j=0; j<15; j++) {
-                player = 1;
-                var $div = $container.append("<div></div>");
-                for (var i=0; i<8; i++) {
-                    var cardPos = (i+offset)%8;
-                    var tooltipText = 'Player '+(cardPos+1)+'<br/>Pick '+(j+1)+'';
-                    $div.append("<img  data-player='"+(cardPos+1)+"' data-toggle='tooltip' title='"+tooltipText+"' class='card"+card+" column"+(i+1)+" pick"+(j+1)+" player"+(cardPos+1)+"' style='width:"+cardWidth+"px;' src='"+pack[(cardPos+j*8)]+"'/>");
-                    card++;
-                }
-                offset++;
+            function highlightSelectedPlayer() {
+                $("#playerChooser > a > span").text("Player "+highlightedPlayer);
+                $("#cardsContainer img").removeClass("highlight");
+                $(".player"+highlightedPlayer).addClass("highlight");
             }
-            var $cards = $container.find("img");
-            $cards.tooltip({placement: "top", html: true});
-            $cards.click(function() {
-                // highlight player that picked this card
-                highlightedPlayer = $(this).data("player");
-                highlightSelectedPlayer();
-            });
-        }
+            function loadPackData() {
+                var pack = activeData[activePackNumber];
+                var offset = 0;
+                var $container = $("#cardsContainer");
+                $container.html("");
+                $container.css("width", cardWidth*8+"px");
+                var card = 0;
+                for (var j=0; j<15; j++) {
+                    player = 1;
+                    var $div = $container.append("<div></div>");
+                    for (var i=0; i<8; i++) {
+                        var cardPos = (i+offset)%8;
+                        var tooltipText = showTooltips? 'Player '+(cardPos+1)+'<br/>Pick '+(j+1)+'' : "";
+                        $div.append("<img  data-player='"+(cardPos+1)+"' data-toggle='tooltip' title='"+tooltipText+"' class='card"+card+" column"+(i+1)+" pick"+(j+1)+" player"+(cardPos+1)+"' style='width:"+cardWidth+"px;' src='"+pack[(cardPos+j*8)]+"'/>");
+                        card++;
+                    }
+                    offset++;
+                }
+                var $cards = $container.find("img");
+                if (showTooltips) {
+                    $cards.tooltip({placement: "top", html: true});
+                }
+                $cards.click(function() {
+                    // highlight player that picked this card
+                    highlightedPlayer = $(this).data("player");
+                    highlightSelectedPlayer();
+                });
+            }
+        })();
     </script>
 
 <#include "footer.ftl">

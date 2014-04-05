@@ -8,7 +8,12 @@
 .credit {
     margin: 20px 0;
 }
-
+.settings-menu {
+    padding-left: 5px;
+}
+.settings-menu label{
+    font-weight: normal;
+}
 .help-container {
     position: relative;
 }
