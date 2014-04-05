@@ -199,7 +199,6 @@
                 // draft controls
                 $("#packChooser .dropdown-menu a").click(function() {
                     activePackNumber = parseInt($(this).data("id"));
-                    $("#packChooser > a > span").text("Pack "+(activePackNumber+1));
                     loadPackData();
                     highlightSelectedPlayer();
                 });
@@ -215,6 +214,7 @@
                 $(".player"+highlightedPlayer).addClass("highlight");
             }
             function loadPackData() {
+                $("#packChooser > a > span").text("Pack "+(activePackNumber+1));
                 var pack = activeData[activePackNumber];
                 var offset = 0;
                 var $container = $("#cardsContainer");
