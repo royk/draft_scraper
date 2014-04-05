@@ -16,7 +16,7 @@
                     </li>
                 </ul>
                 <div class="help-container">
-                    <div id="startHelp" class="start-help help">
+                    <div id="startHelp" class="start-help help floating-help">
                         <span class="glyphicon glyphicon-arrow-up"></span><br/>Select a draft to start
                     </div>
                 </div>
@@ -50,8 +50,40 @@
                 </ul>
             </li>
         </ul>
+        <ul class="nav navbar-nav navbar-right draft-control">
+            <li><a href="#" id="helpButton"><span class="glyphicon glyphicon-question-sign"></span></a></li>
+            <li><a href="#" id="settingsButton"><span class="glyphicon glyphicon-cog"></span></a></li>
+        </ul>
 <@header.navbarEnd/>
 <div id="wrap">
+    <div class="container help help-tutorial" id="helpSectionContainer" style="position: relative;">
+        <div style="position: absolute;">
+            <div id="helpSection1" class="help-section">
+                Each column below represents a pack opened by a certain player.
+                The <a href="#" data-column="1" class="column-highlight-button">first column</a> shows all the cards in the pack opened by the first player.
+                The <a href="#" data-column="2" class="column-highlight-button">second column</a> is the pack opened by the second player, etc.
+            </div>
+            <div id="helpSection2" class="help-section">
+                Cards are sorted by their pick number. For example, the <a href="#" class="card-highlight-button" data-card="0">top card of the first column</a>
+                is the first player's first pick.
+            </div>
+            <div id="helpSection3" class="help-section">
+                After each pick, the player's next pick will be down one spot, left one spot. For example, the <a href="#" class="card-highlight-button" data-card="9">third player's second pick</a>
+                is right below the second player's first pick. (i.e., the second card on the second pack's column).
+            </div>
+            <div id="helpSection4" class="help-section">
+                Below each pick are the cards that were in the pack when the player made his pick. So for each pick,
+                you get to see exactly what were the options that were available to the player.
+            </div>
+            <div id="helpSection5" class="help-section">
+                In the menu above, you can change the shown pack or the highlighted player. Alternatively, you can
+                simply click on a card to highlight all the picks of the player who picked it.
+            </div>
+            <div style="margin-top:20px;">
+                <a href="#" id="helpNextButton" >Next <span class="glyphicon glyphicon-play"></span></span></a>
+            </div>
+        </div>
+    </div>
     <div class="container clear-top cards-container" id="cardsContainer">
 
     </div>
@@ -63,12 +95,47 @@
         var highlightedPlayer = 1;
         var startHelpNeeded = true;
         var cardWidth = 120;
+        var currentHelpSection = 0;
         $(document).ready(function() {
             setTimeout(function() {
                 if (startHelpNeeded) {
                     $("#startHelp").show().animate({top: "-=20", opacity: 1})
                 }
             }, 3000);
+            $("#helpButton").click(function() {
+                if (currentHelpSection!==0) return;
+                showNextHelpSection();
+                $("#helpSectionContainer").show().animate({opacity:1});
+            });
+            $("#helpNextButton").click(function() {
+                showNextHelpSection();
+            });
+
+            function showNextHelpSection() {
+                currentHelpSection++;
+                $(".help-section").hide();
+                var nextSection = $("#helpSection"+currentHelpSection);
+                if (nextSection.length) {
+                    $("#helpSection"+currentHelpSection).show();
+                } else {
+                    currentHelpSection = 0;
+                    $("#helpSectionContainer").hide().css("opacity", "0");
+                }
+            }
+
+            $(".column-highlight-button").hover(function() {
+                var column = $(this).data("column");
+                $("#cardsContainer img").removeClass("highlight");
+                $("#cardsContainer img.column"+column).addClass("highlight");
+            });
+            $(".card-highlight-button").hover(function() {
+                var card = $(this).data("card");
+                $("#cardsContainer img").removeClass("highlight");
+                $("#cardsContainer img.card"+card).addClass("highlight");
+            });
+
+
+
             $("#draftSelector a").click(function() {
                 startHelpNeeded = false;
                 $("#startHelp").hide();
@@ -113,13 +180,15 @@
             var $container = $("#cardsContainer");
             $container.html("");
             $container.css("width", cardWidth*8+"px");
+            var card = 0;
             for (var j=0; j<15; j++) {
                 player = 1;
                 var $div = $container.append("<div></div>");
                 for (var i=0; i<8; i++) {
                     var cardPos = (i+offset)%8;
                     var tooltipText = 'Player '+(cardPos+1)+'<br/>Pick '+(j+1)+'';
-                    $div.append("<img  data-player='"+(cardPos+1)+"' data-toggle='tooltip' title='"+tooltipText+"' class='pick"+(j+1)+" player"+(cardPos+1)+"' style='width:"+cardWidth+"px;' src='"+pack[(cardPos+j*8)]+"'/>");
+                    $div.append("<img  data-player='"+(cardPos+1)+"' data-toggle='tooltip' title='"+tooltipText+"' class='card"+card+" column"+(i+1)+" pick"+(j+1)+" player"+(cardPos+1)+"' style='width:"+cardWidth+"px;' src='"+pack[(cardPos+j*8)]+"'/>");
+                    card++;
                 }
                 offset++;
             }

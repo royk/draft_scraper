@@ -12,11 +12,14 @@
 .help-container {
     position: relative;
 }
-.help {
+.floating-help {
     position: absolute;
+}
+.help {
     text-align: center;
     display: none;
     opacity: 0;
+    color: #777;
 }
 .tooltip-inner {
     text-align: left !important;
