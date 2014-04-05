@@ -1,5 +1,7 @@
-<#include "header.ftl">
-</div>
+<#import "header.ftl" as header/>
+<@header.header/>
+<@header.navbarStart/>
+<@header.navbarEnd/>
 <div class="container">
     <div class="row span12 draftControls" id="loadDraftControls">
         <label>Draft Viewer URL: <input id="scrapeDraftURL" type="text" placeholder="e.g. http://gatherer.wizards.com/magic/draftools/draftviewer.asp?draftid=08_01_2013_1"></label>
@@ -84,3 +86,4 @@
     }
 </script>
 <#include "footer.ftl">
+

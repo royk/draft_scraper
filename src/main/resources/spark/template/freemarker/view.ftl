@@ -14,6 +14,11 @@
                     <li>
                         <a href="#" data-id="1">Pro Tour Born of the gods, Draft 2, Pod 5, BTT (Feb 2014)</a>
                     </li>
+                    <li>
+                        <a href="#" data-id="2">MOCS 2013, Pod 1, BTT (March 2014)</a>
+                    </li><li>
+                        <a href="#" data-id="3">MOCS 2013, Pod 2, BTT (March 2014)</a>
+                    </li>
                 </ul>
                 <div class="help-container">
                     <div id="startHelp" class="start-help help floating-help">
