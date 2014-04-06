@@ -124,7 +124,7 @@
                         $("#startHelp").show().animate({top: "-=20", opacity: 1})
                     }
                 }, 3000);
-                $("input[name=cardSize").filter("[value="+cardWidth+"]").prop("checked", true);
+                $("input[name=cardSize]").filter("[value="+cardWidth+"]").prop("checked", true);
                 $("input[name=cardSize]").change(function() {
                     cardWidth = $(this).val();
                     localStorage.setItem('cardWidth', cardWidth);
