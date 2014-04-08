@@ -220,6 +220,7 @@
                 var $container = $("#cardsContainer");
                 $container.html("");
                 $container.css("width", cardWidth*8+"px");
+                var cardHeight = Math.floor(cardWidth / 0.7017543859649123);
                 var card = 0;
                 for (var j=0; j<15; j++) {
                     player = 1;
@@ -227,7 +228,12 @@
                     for (var i=0; i<8; i++) {
                         var cardPos = (i+offset)%8;
                         var tooltipText = showTooltips? 'Player '+(cardPos+1)+'<br/>Pick '+(j+1)+'' : "";
-                        $div.append("<img  data-player='"+(cardPos+1)+"' data-toggle='tooltip' title='"+tooltipText+"' class='card"+card+" column"+(i+1)+" pick"+(j+1)+" player"+(cardPos+1)+"' style='width:"+cardWidth+"px;' src='"+pack[(cardPos+j*8)]+"'/>");
+                        var cardUrl = pack[(cardPos+j*8)];
+                        var cardName = cardUrl.split("/");
+                        cardName = cardName[cardName.length-1];
+                        cardName = cardName.split(".")[0];
+                        cardName = cardName.replace(/_/gi, " ");
+                        $div.append("<img alt='"+cardName+"'data-player='"+(cardPos+1)+"' data-toggle='tooltip' title='"+tooltipText+"' class='card"+card+" column"+(i+1)+" pick"+(j+1)+" player"+(cardPos+1)+"' style='width:"+cardWidth+"px;height:"+cardHeight+";' src='"+pack[(cardPos+j*8)]+"'/>");
                         card++;
                     }
                     offset++;
