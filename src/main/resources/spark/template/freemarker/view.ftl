@@ -54,6 +54,14 @@
                 </#list>
                 </ul>
             </li>
+            <li class="draft-control">
+                <a class="player-seen-only" href="#" id="playerSeenOnly" title="<div style='width:150px;text-align:center;'>Hide cards not seen<br/> by selected player</div>" data-toggle="tooltip">
+                    <span class="glyphicon glyphicon-eye-open" />
+                </a>
+                <a class="player-seen-only" href="#" id="removePlayerSeenOnly" title="<div style='width:100px;text-align:center;'>Show all cards</div>" data-toggle="tooltip" style="display:none;">
+                    <span class="glyphicon glyphicon-eye-close" />
+                </a>
+            </li>
         </ul>
         <ul class="nav navbar-nav navbar-right draft-control">
             <li><a href="#" id="helpButton"><span class="glyphicon glyphicon-question-sign"></span></a></li>
@@ -118,6 +126,25 @@
             var currentHelpSection = 0;
             var activePackNumber = 0;
             var showTooltips = localStorage.getItem('showTooltips')==undefined ? true : localStorage.getItem('showTooltips')=="true";
+            $("#playerSeenOnly, #removePlayerSeenOnly").tooltip({placement: "bottom", html: true});
+            $("#playerSeenOnly").click(function() {
+                $(this).hide();
+                $("#removePlayerSeenOnly").show();
+                for (var i=1; i<9; i++) {
+                    var seen = false;
+                    $(".column"+i).each(function() {
+                        if (!seen && parseInt($(this).data("player"),10) ===highlightedPlayer) {
+                            seen = true;
+                        }
+                        $(this).css("visibility", seen ? "visible" : "hidden");
+                    });
+                }
+            });
+            $("#removePlayerSeenOnly").click(function() {
+                $(this).hide();
+                $("#playerSeenOnly").show();
+                setHighlightedPlayer(highlightedPlayer);
+            })
             $(document).ready(function() {
                 setTimeout(function() {
                     if (startHelpNeeded) {
@@ -200,14 +227,18 @@
                 $("#packChooser .dropdown-menu a").click(function() {
                     activePackNumber = parseInt($(this).data("id"));
                     loadPackData();
-                    highlightSelectedPlayer();
+                    setHighlightedPlayer(highlightedPlayer);
                 });
                 $("#playerChooser .dropdown-menu a").click(function() {
-                    highlightedPlayer = parseInt($(this).data("id"));
-
-                    highlightSelectedPlayer();
+                    setHighlightedPlayer(parseInt($(this).data("id")));
                 });
             });
+
+            function setHighlightedPlayer(player) {
+                highlightedPlayer = player;
+                $(".card").css("visibility", "visible");
+                highlightSelectedPlayer();
+            }
             function highlightSelectedPlayer() {
                 $("#playerChooser > a > span").text("Player "+highlightedPlayer);
                 $("#cardsContainer img").removeClass("highlight");
@@ -233,7 +264,7 @@
                         cardName = cardName[cardName.length-1];
                         cardName = cardName.split(".")[0];
                         cardName = cardName.replace(/_/gi, " ");
-                        $div.append("<img alt='"+cardName+"'data-player='"+(cardPos+1)+"' data-toggle='tooltip' title='"+tooltipText+"' class='card"+card+" column"+(i+1)+" pick"+(j+1)+" player"+(cardPos+1)+"' style='width:"+cardWidth+"px;height:"+cardHeight+";' src='"+pack[(cardPos+j*8)]+"'/>");
+                        $div.append("<img alt='"+cardName+"'data-player='"+(cardPos+1)+"' data-toggle='tooltip' title='"+tooltipText+"' class='card card"+card+" column"+(i+1)+" pick"+(j+1)+" player"+(cardPos+1)+"' style='width:"+cardWidth+"px;height:"+cardHeight+";' src='"+pack[(cardPos+j*8)]+"'/>");
                         card++;
                     }
                     offset++;
@@ -244,8 +275,7 @@
                 }
                 $cards.click(function() {
                     // highlight player that picked this card
-                    highlightedPlayer = $(this).data("player");
-                    highlightSelectedPlayer();
+                    setHighlightedPlayer($(this).data("player"));
                 });
             }
         })();
