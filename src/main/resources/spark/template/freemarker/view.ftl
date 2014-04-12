@@ -254,17 +254,22 @@
                 var cardHeight = Math.floor(cardWidth / 0.7017543859649123);
                 var card = 0;
                 for (var j=0; j<15; j++) {
-                    player = 1;
+                    var player = 1;
                     var $div = $container.append("<div></div>");
                     for (var i=0; i<8; i++) {
-                        var cardPos = (i+offset)%8;
-                        var tooltipText = showTooltips? 'Player '+(cardPos+1)+'<br/>Pick '+(j+1)+'' : "";
-                        var cardUrl = pack[(cardPos+j*8)];
+                        var currentPlayer = (i+offset)%8;
+                        if (activePackNumber==1) {
+                            currentPlayer = (i-offset)%8;
+                            if (currentPlayer<0) currentPlayer+=8;
+                        }
+                        console.log(i,currentPlayer,(currentPlayer+j*8));
+                        var tooltipText = i+" "+currentPlayer+" "+(currentPlayer+j*8);//showTooltips? 'Player '+(cardPos+1)+'<br/>Pick '+(j+1)+'' : "";
+                        var cardUrl = pack[(currentPlayer+j*8)];
                         var cardName = cardUrl.split("/");
                         cardName = cardName[cardName.length-1];
                         cardName = cardName.split(".")[0];
                         cardName = cardName.replace(/_/gi, " ");
-                        $div.append("<img alt='"+cardName+"'data-player='"+(cardPos+1)+"' data-toggle='tooltip' title='"+tooltipText+"' class='card card"+card+" column"+(i+1)+" pick"+(j+1)+" player"+(cardPos+1)+"' style='width:"+cardWidth+"px;height:"+cardHeight+";' src='"+pack[(cardPos+j*8)]+"'/>");
+                        $div.append("<img alt='"+cardName+"'data-player='"+(currentPlayer+1)+"' data-toggle='tooltip' title='"+tooltipText+"' class='card card"+card+" column"+(i+1)+" pick"+(j+1)+" player"+(currentPlayer+1)+"' style='width:"+cardWidth+"px;height:"+cardHeight+";' src='"+pack[(currentPlayer+j*8)]+"'/>");
                         card++;
                     }
                     offset++;
