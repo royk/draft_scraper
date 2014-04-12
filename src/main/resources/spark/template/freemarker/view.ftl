@@ -262,8 +262,7 @@
                             currentPlayer = (i-offset)%8;
                             if (currentPlayer<0) currentPlayer+=8;
                         }
-                        console.log(i,currentPlayer,(currentPlayer+j*8));
-                        var tooltipText = i+" "+currentPlayer+" "+(currentPlayer+j*8);//showTooltips? 'Player '+(cardPos+1)+'<br/>Pick '+(j+1)+'' : "";
+                        var tooltipText = showTooltips? 'Player '+(currentPlayer+1)+'<br/>Pick '+(j+1)+'' : "";
                         var cardUrl = pack[(currentPlayer+j*8)];
                         var cardName = cardUrl.split("/");
                         cardName = cardName[cardName.length-1];
