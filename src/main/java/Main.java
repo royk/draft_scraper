@@ -23,10 +23,17 @@ public class Main {
             port = LOCAL_PORT;
         }
         setPort(Integer.parseInt(port));
-        get(new FreeMarkerRoute("/view") {
+        get(new FreeMarkerRoute("/") {
             @Override
             public Object handle(Request request, Response response) {
                 return modelAndView(null, "view.ftl");
+            }
+        });
+        get(new Route("/view") {
+            @Override
+            public Object handle(Request request, Response response) {
+                response.redirect("/");
+                return null;
             }
         });
 
