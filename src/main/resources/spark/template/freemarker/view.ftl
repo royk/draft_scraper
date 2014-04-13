@@ -62,6 +62,15 @@
                     <span class="glyphicon glyphicon-eye-close" />
                 </a>
             </li>
+            <li class="draft-control">
+                <a href="#" id="showAllPacks">
+                    Show all packs
+                </a>
+                <a href="#" id="showOnePack" style="display:none;">
+                    Show one pack
+                </a>
+
+            </li>
         </ul>
         <ul class="nav navbar-nav navbar-right draft-control">
             <li><a href="#" id="helpButton"><span class="glyphicon glyphicon-question-sign"></span></a></li>
@@ -125,6 +134,7 @@
             var cardWidth = localStorage.getItem('cardWidth') || 120;
             var currentHelpSection = 0;
             var activePackNumber = 0;
+            var showAllPacks = false;
             var activeDraftTitle = "";
             var showTooltips = localStorage.getItem('showTooltips')==undefined ? true : localStorage.getItem('showTooltips')=="true";
             $("#playerSeenOnly, #removePlayerSeenOnly").tooltip({placement: "bottom", html: true});
@@ -145,6 +155,19 @@
                 $(this).hide();
                 $("#playerSeenOnly").show();
                 setHighlightedPlayer(highlightedPlayer);
+            });
+            $("#showAllPacks").click(function() {
+                showAllPacks = true;
+                $(this).hide();
+                $("#showOnePack").show();
+                loadPackData();
+            });
+            $("#showOnePack").click(function() {
+                $(this).hide();
+                activePackNumber = 0;
+                $("#showAllPacks").show();
+                showAllPacks = false;
+                loadPackData();
             })
             $(document).ready(function() {
                 setTimeout(function() {
@@ -250,36 +273,15 @@
                 var $container = $("#cardsContainer");
                 $container.html("");
                 $container.css("width", cardWidth*8+"px");
-                var cardHeight = Math.floor(cardWidth / 0.7017543859649123);
+
                 $container.append("<h3 style='text-align:center; margin-bottom: 20px;'>"+activeDraftTitle+"</h3>")
-                for (activePackNumber=0; activePackNumber<3; activePackNumber++) {
-                    $("#packChooser > a > span").text("Pack "+(activePackNumber+1));
-                    var pack = activeData[activePackNumber];
-                    var offset = 0;
+                if (showAllPacks) {
+                    for (activePackNumber=0; activePackNumber<3; activePackNumber++) {
+                        loadSinglePack(activePackNumber);
 
-                    var card = 0;
-                    for (var j=0; j<15; j++) {
-                        var player = 1;
-                        var $div = $container.append("<div></div>");
-                        for (var i=0; i<8; i++) {
-                            var currentPlayer = (i+offset)%8;
-                            if (activePackNumber==1) {
-                                currentPlayer = (i-offset)%8;
-                                if (currentPlayer<0) currentPlayer+=8;
-                            }
-                            var tooltipText = showTooltips? 'Player '+(currentPlayer+1)+'<br/>Pick '+(j+1)+'' : "";
-                            var cardUrl = pack[(currentPlayer+j*8)];
-                            var cardName = cardUrl.split("/");
-                            cardName = cardName[cardName.length-1];
-                            cardName = cardName.split(".")[0];
-                            cardName = cardName.replace(/_/gi, " ");
-                            $div.append("<img alt='"+cardName+"'data-player='"+(currentPlayer+1)+"' data-toggle='tooltip' title='"+tooltipText+"' class='card card"+card+" column"+(i+1)+" pick"+(j+1)+" player"+(currentPlayer+1)+"' style='width:"+cardWidth+"px;height:"+cardHeight+";' src='"+pack[(currentPlayer+j*8)]+"'/>");
-                            card++;
-                        }
-                        offset++;
                     }
-                    $container.append("<div style='margin:50px 0;'></div>");
-
+                } else {
+                    loadSinglePack(activePackNumber);
                 }
                 var $cards = $container.find("img");
                 if (showTooltips) {
@@ -289,6 +291,36 @@
                     // highlight player that picked this card
                     setHighlightedPlayer($(this).data("player"));
                 });
+            }
+            function loadSinglePack(packNumber) {
+                var $container = $("#cardsContainer");
+                var cardHeight = Math.floor(cardWidth / 0.7017543859649123);
+                $("#packChooser > a > span").text("Pack "+(packNumber+1));
+                var pack = activeData[packNumber];
+                var offset = 0;
+
+                var card = 0;
+                for (var j=0; j<15; j++) {
+                    var player = 1;
+                    var $div = $container.append("<div></div>");
+                    for (var i=0; i<8; i++) {
+                        var currentPlayer = (i+offset)%8;
+                        if (packNumber==1) {
+                            currentPlayer = (i-offset)%8;
+                            if (currentPlayer<0) currentPlayer+=8;
+                        }
+                        var tooltipText = showTooltips? 'Player '+(currentPlayer+1)+'<br/>Pick '+(j+1)+'' : "";
+                        var cardUrl = pack[(currentPlayer+j*8)];
+                        var cardName = cardUrl.split("/");
+                        cardName = cardName[cardName.length-1];
+                        cardName = cardName.split(".")[0];
+                        cardName = cardName.replace(/_/gi, " ");
+                        $div.append("<img alt='"+cardName+"'data-player='"+(currentPlayer+1)+"' data-toggle='tooltip' title='"+tooltipText+"' class='card card"+card+" column"+(i+1)+" pick"+(j+1)+" player"+(currentPlayer+1)+"' style='width:"+cardWidth+"px;height:"+cardHeight+";' src='"+pack[(currentPlayer+j*8)]+"'/>");
+                        card++;
+                    }
+                    offset++;
+                }
+                $container.append("<div style='margin:50px 0;'></div>");
             }
         })();
     </script>
