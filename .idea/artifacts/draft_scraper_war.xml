@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="draft_scraper:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="draftScraper.war">
+      <element id="artifact" artifact-name="draft_scraper:war exploded" />
+    </root>
+  </artifact>
+</component>

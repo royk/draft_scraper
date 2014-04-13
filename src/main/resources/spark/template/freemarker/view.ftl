@@ -125,6 +125,7 @@
             var cardWidth = localStorage.getItem('cardWidth') || 120;
             var currentHelpSection = 0;
             var activePackNumber = 0;
+            var activeDraftTitle = "";
             var showTooltips = localStorage.getItem('showTooltips')==undefined ? true : localStorage.getItem('showTooltips')=="true";
             $("#playerSeenOnly, #removePlayerSeenOnly").tooltip({placement: "bottom", html: true});
             $("#playerSeenOnly").click(function() {
@@ -202,6 +203,7 @@
 
 
                 $("#draftSelector a").click(function() {
+                    activeDraftTitle = $(this).text();
                     startHelpNeeded = false;
                     $("#startHelp").hide();
                     var id = $(this).data("id");
@@ -245,33 +247,39 @@
                 $(".player"+highlightedPlayer).addClass("highlight");
             }
             function loadPackData() {
-                $("#packChooser > a > span").text("Pack "+(activePackNumber+1));
-                var pack = activeData[activePackNumber];
-                var offset = 0;
                 var $container = $("#cardsContainer");
                 $container.html("");
                 $container.css("width", cardWidth*8+"px");
                 var cardHeight = Math.floor(cardWidth / 0.7017543859649123);
-                var card = 0;
-                for (var j=0; j<15; j++) {
-                    var player = 1;
-                    var $div = $container.append("<div></div>");
-                    for (var i=0; i<8; i++) {
-                        var currentPlayer = (i+offset)%8;
-                        if (activePackNumber==1) {
-                            currentPlayer = (i-offset)%8;
-                            if (currentPlayer<0) currentPlayer+=8;
+                $container.append("<h3 style='text-align:center; margin-bottom: 20px;'>"+activeDraftTitle+"</h3>")
+                for (activePackNumber=0; activePackNumber<3; activePackNumber++) {
+                    $("#packChooser > a > span").text("Pack "+(activePackNumber+1));
+                    var pack = activeData[activePackNumber];
+                    var offset = 0;
+
+                    var card = 0;
+                    for (var j=0; j<15; j++) {
+                        var player = 1;
+                        var $div = $container.append("<div></div>");
+                        for (var i=0; i<8; i++) {
+                            var currentPlayer = (i+offset)%8;
+                            if (activePackNumber==1) {
+                                currentPlayer = (i-offset)%8;
+                                if (currentPlayer<0) currentPlayer+=8;
+                            }
+                            var tooltipText = showTooltips? 'Player '+(currentPlayer+1)+'<br/>Pick '+(j+1)+'' : "";
+                            var cardUrl = pack[(currentPlayer+j*8)];
+                            var cardName = cardUrl.split("/");
+                            cardName = cardName[cardName.length-1];
+                            cardName = cardName.split(".")[0];
+                            cardName = cardName.replace(/_/gi, " ");
+                            $div.append("<img alt='"+cardName+"'data-player='"+(currentPlayer+1)+"' data-toggle='tooltip' title='"+tooltipText+"' class='card card"+card+" column"+(i+1)+" pick"+(j+1)+" player"+(currentPlayer+1)+"' style='width:"+cardWidth+"px;height:"+cardHeight+";' src='"+pack[(currentPlayer+j*8)]+"'/>");
+                            card++;
                         }
-                        var tooltipText = showTooltips? 'Player '+(currentPlayer+1)+'<br/>Pick '+(j+1)+'' : "";
-                        var cardUrl = pack[(currentPlayer+j*8)];
-                        var cardName = cardUrl.split("/");
-                        cardName = cardName[cardName.length-1];
-                        cardName = cardName.split(".")[0];
-                        cardName = cardName.replace(/_/gi, " ");
-                        $div.append("<img alt='"+cardName+"'data-player='"+(currentPlayer+1)+"' data-toggle='tooltip' title='"+tooltipText+"' class='card card"+card+" column"+(i+1)+" pick"+(j+1)+" player"+(currentPlayer+1)+"' style='width:"+cardWidth+"px;height:"+cardHeight+";' src='"+pack[(currentPlayer+j*8)]+"'/>");
-                        card++;
+                        offset++;
                     }
-                    offset++;
+                    $container.append("<div style='margin:50px 0;'></div>");
+
                 }
                 var $cards = $container.find("img");
                 if (showTooltips) {
