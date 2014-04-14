@@ -38,6 +38,9 @@
                             <a data-id="${i}">Pack ${i+1}</a>
                         </li>
                     </#list>
+                    <li>
+                        <a data-id="all">All packs</a>
+                    </li>
                 </ul>
             </li>
             <li class="dropdown draft-control" id="playerChooser">
@@ -61,15 +64,6 @@
                 <a class="player-seen-only" href="#" id="removePlayerSeenOnly" title="<div style='width:100px;text-align:center;'>Show all cards</div>" data-toggle="tooltip" style="display:none;">
                     <span class="glyphicon glyphicon-eye-close" />
                 </a>
-            </li>
-            <li class="draft-control">
-                <a href="#" id="showAllPacks">
-                    Show all packs
-                </a>
-                <a href="#" id="showOnePack" style="display:none;">
-                    Show one pack
-                </a>
-
             </li>
         </ul>
         <ul class="nav navbar-nav navbar-right draft-control">
@@ -136,39 +130,22 @@
             var activePackNumber = 0;
             var showAllPacks = false;
             var activeDraftTitle = "";
+            var hideUnseen = false;
             var showTooltips = localStorage.getItem('showTooltips')==undefined ? true : localStorage.getItem('showTooltips')=="true";
             $("#playerSeenOnly, #removePlayerSeenOnly").tooltip({placement: "bottom", html: true});
             $("#playerSeenOnly").click(function() {
                 $(this).hide();
                 $("#removePlayerSeenOnly").show();
-                for (var i=1; i<9; i++) {
-                    var seen = false;
-                    $(".column"+i).each(function() {
-                        if (!seen && parseInt($(this).data("player"),10) ===highlightedPlayer) {
-                            seen = true;
-                        }
-                        $(this).css("visibility", seen ? "visible" : "hidden");
-                    });
-                }
+                hideUnseen = true;
+
+                setHighlightedPlayer(highlightedPlayer);
             });
             $("#removePlayerSeenOnly").click(function() {
                 $(this).hide();
                 $("#playerSeenOnly").show();
+                hideUnseen = false;
                 setHighlightedPlayer(highlightedPlayer);
             });
-            $("#showAllPacks").click(function() {
-                showAllPacks = true;
-                $(this).hide();
-                $("#showOnePack").show();
-                loadPackData();
-            });
-            $("#showOnePack").click(function() {
-                $(this).hide();
-                activePackNumber = 0;
-                $("#showAllPacks").show();
-                showAllPacks = false;
-                loadPackData();
-            })
             $(document).ready(function() {
                 setTimeout(function() {
                     if (startHelpNeeded) {
@@ -250,7 +227,11 @@
                 });
                 // draft controls
                 $("#packChooser .dropdown-menu a").click(function() {
-                    activePackNumber = parseInt($(this).data("id"));
+                    var id = $(this).data("id");
+                    showAllPacks = id==="all";
+                    if (!showAllPacks) {
+                        activePackNumber = parseInt(id);
+                    }
                     loadPackData();
                     setHighlightedPlayer(highlightedPlayer);
                 });
@@ -259,9 +240,27 @@
                 });
             });
 
+            function hideUnseenByPlayer() {
+                $(".pack").each(function() {
+                    var $this = $(this);
+                    for (var i=1; i<9; i++) {
+                        var seen = false;
+                        $this.find(".column"+i).each(function() {
+                            if (!seen && parseInt($(this).data("player"),10) ===highlightedPlayer) {
+                                seen = true;
+                            }
+                            $(this).css("visibility", seen ? "visible" : "hidden");
+                        });
+                    }
+                });
+            }
+
             function setHighlightedPlayer(player) {
                 highlightedPlayer = player;
                 $(".card").css("visibility", "visible");
+                if (hideUnseen) {
+                    hideUnseenByPlayer();
+                }
                 highlightSelectedPlayer();
             }
             function highlightSelectedPlayer() {
@@ -295,14 +294,17 @@
             function loadSinglePack(packNumber) {
                 var $container = $("#cardsContainer");
                 var cardHeight = Math.floor(cardWidth / 0.7017543859649123);
-                $("#packChooser > a > span").text("Pack "+(packNumber+1));
+                if (!showAllPacks) {
+                    $("#packChooser > a > span").text("Pack "+(packNumber+1));
+                } else {
+                    $("#packChooser > a > span").text("All packs");
+                }
                 var pack = activeData[packNumber];
                 var offset = 0;
-
+                var $packDiv = $("<div class='pack pack"+(packNumber+1)+"'></div>")
                 var card = 0;
                 for (var j=0; j<15; j++) {
                     var player = 1;
-                    var $div = $container.append("<div></div>");
                     for (var i=0; i<8; i++) {
                         var currentPlayer = (i+offset)%8;
                         if (packNumber==1) {
@@ -315,11 +317,12 @@
                         cardName = cardName[cardName.length-1];
                         cardName = cardName.split(".")[0];
                         cardName = cardName.replace(/_/gi, " ");
-                        $div.append("<img alt='"+cardName+"'data-player='"+(currentPlayer+1)+"' data-toggle='tooltip' title='"+tooltipText+"' class='card card"+card+" column"+(i+1)+" pick"+(j+1)+" player"+(currentPlayer+1)+"' style='width:"+cardWidth+"px;height:"+cardHeight+";' src='"+pack[(currentPlayer+j*8)]+"'/>");
+                        $packDiv.append("<img alt='"+cardName+"'data-player='"+(currentPlayer+1)+"' data-toggle='tooltip' title='"+tooltipText+"' class='card card"+card+" column"+(i+1)+" pick"+(j+1)+" player"+(currentPlayer+1)+"' style='width:"+cardWidth+"px;height:"+cardHeight+";' src='"+pack[(currentPlayer+j*8)]+"'/>");
                         card++;
                     }
                     offset++;
                 }
+                $container.append($packDiv);
                 $container.append("<div style='margin:50px 0;'></div>");
             }
         })();
