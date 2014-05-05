@@ -329,7 +329,10 @@
                 $(".card").mouseover(function() {
                     // Has to happen outside execution scope because tooltip won't exist yet.
                     setTimeout(function() {
-                        $(".tooltip").animate({top: "-=15"}, 200);
+                        var $tooltip = $(".tooltip");
+                        if (!$tooltip.is(":animated")) {
+                            $tooltip.animate({top: "-=15"}, 200);
+                        }
                     }, 0);
                 });
             }
