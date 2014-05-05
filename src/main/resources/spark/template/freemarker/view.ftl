@@ -273,7 +273,7 @@
                 $container.html("");
                 $container.css("width", cardWidth*8+"px");
 
-                $container.append("<h3 style='text-align:center; margin-bottom: 20px;'>"+activeDraftTitle+"</h3>")
+                $container.append("<h3 style='text-align:center; margin-bottom: 20px;'>"+activeDraftTitle+"</h3>");
                 if (showAllPacks) {
                     for (activePackNumber=0; activePackNumber<3; activePackNumber++) {
                         loadSinglePack(activePackNumber);
@@ -317,13 +317,21 @@
                         cardName = cardName[cardName.length-1];
                         cardName = cardName.split(".")[0];
                         cardName = cardName.replace(/_/gi, " ");
-                        $packDiv.append("<img alt='"+cardName+"'data-player='"+(currentPlayer+1)+"' data-toggle='tooltip' title='"+tooltipText+"' class='card card"+card+" column"+(i+1)+" pick"+(j+1)+" player"+(currentPlayer+1)+"' style='width:"+cardWidth+"px;height:"+cardHeight+";' src='"+pack[(currentPlayer+j*8)]+"'/>");
+                        var $card = $("<img alt='"+cardName+"'data-player='"+(currentPlayer+1)+"' data-toggle='tooltip' title='"+tooltipText+"' class='card card"+card+" column"+(i+1)+" pick"+(j+1)+" player"+(currentPlayer+1)+"' style='width:"+cardWidth+"px;height:"+cardHeight+";' src='"+pack[(currentPlayer+j*8)]+"'/>");
+                        $packDiv.append($card);
                         card++;
                     }
                     offset++;
                 }
                 $container.append($packDiv);
                 $container.append("<div style='margin:50px 0;'></div>");
+                // Move the tooltip up a bit so it doesn't obstruct the card name when the card is scaled.
+                $(".card").mouseover(function() {
+                    // Has to happen outside execution scope because tooltip won't exist yet.
+                    setTimeout(function() {
+                        $(".tooltip").animate({top: "-=15"}, 200);
+                    }, 0);
+                });
             }
         })();
     </script>
