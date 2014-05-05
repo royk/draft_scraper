@@ -11,9 +11,9 @@
 }
 
 .card {
-    transition: box-shadow 200ms, transform 250ms ease 250ms;
-    -webkit-transition: -webkit-box-shadow 200ms, -webkit-transform 250ms ease 250ms;
-    -moz-transition: -moz-box-shadow 200ms, -moz-transform 250ms ease 250ms;
+    transition: box-shadow 200ms, transform 250ms ease;
+    -webkit-transition: -webkit-box-shadow 200ms, -webkit-transform 250ms ease;
+    -moz-transition: -moz-box-shadow 200ms, -moz-transform 250ms ease;
 }
 
 .card:hover {
