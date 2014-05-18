@@ -9,15 +9,22 @@
                 </a>
                 <ul class="dropdown-menu" id="draftSelector">
                     <li>
-                        <a href="#" data-id="0">Pro Tour Theros, Draft 1 Pod 33, Triple Theros (Oct 2013)</a>
+                        <a href="#" data-id="4">Pro Tour Journey Into Nyx, Draft 1 Pod 4, JBT (May 2014)</a>
+                    </li>
+                    <li>
+                        <a href="#" data-id="5">Pro Tour Journey Into Nyx, Draft 2 Pod 1, JBT (May 2014)</a>
+                    </li>
+                    <li>
+                        <a href="#" data-id="2">MOCS 2013, Pod 1, BTT (March 2014)</a>
+                    </li>
+                    <li>
+                        <a href="#" data-id="3">MOCS 2013, Pod 2, BTT (March 2014)</a>
                     </li>
                     <li>
                         <a href="#" data-id="1">Pro Tour Born of the gods, Draft 2, Pod 5, BTT (Feb 2014)</a>
                     </li>
                     <li>
-                        <a href="#" data-id="2">MOCS 2013, Pod 1, BTT (March 2014)</a>
-                    </li><li>
-                        <a href="#" data-id="3">MOCS 2013, Pod 2, BTT (March 2014)</a>
+                        <a href="#" data-id="0">Pro Tour Theros, Draft 1 Pod 33, Triple Theros (Oct 2013)</a>
                     </li>
                 </ul>
                 <div class="help-container">
