@@ -9,6 +9,9 @@
                 </a>
                 <ul class="dropdown-menu" id="draftSelector">
                     <li>
+                        <a href="#" data-id="6">Pro Tour Magic 2015, Draft 1, Pod 9, M15 (Aug 2014)</a>
+                    </li>
+                    <li>
                         <a href="#" data-id="4">Pro Tour Journey Into Nyx, Draft 1 Pod 4, JBT (May 2014)</a>
                     </li>
                     <li>
@@ -154,6 +157,11 @@
                 setHighlightedPlayer(highlightedPlayer);
             });
             $(document).ready(function() {
+                var preloadDraftId = getURLParameter("draft_id");
+                if (preloadDraftId) {
+                    startHelpNeeded = false;
+                    loadSavedDraft(parseInt(preloadDraftId, 10));
+                }
                 setTimeout(function() {
                     if (startHelpNeeded) {
                         $("#startHelp").show().animate({top: "-=20", opacity: 1})
@@ -210,27 +218,7 @@
 
 
                 $("#draftSelector a").click(function() {
-                    activeDraftTitle = $(this).text();
-                    startHelpNeeded = false;
-                    $("#startHelp").hide();
-                    var id = $(this).data("id");
-                    $.ajax({
-                        type: "GET",
-                        url: "/loadSavedDraft",
-                        data: {
-                            draftId: id
-                        },
-                        success: function(data) {
-                            $("#startHelp").hide();
-                            stringData = data;
-                            data = JSON.parse(data);
-                            activeData = data.picks.data;
-                            $(".draft-control").show();
-                            activePackNumber = 0;
-                            loadPackData();
-                            highlightSelectedPlayer();
-                        }
-                    });
+                    loadSavedDraft($(this).data("id"));
                 });
                 // draft controls
                 $("#packChooser .dropdown-menu a").click(function() {
@@ -246,6 +234,33 @@
                     setHighlightedPlayer(parseInt($(this).data("id")));
                 });
             });
+
+            function getURLParameter(name) {
+                return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null
+            }
+
+            function loadSavedDraft(id) {
+                activeDraftTitle = $(this).text();
+                startHelpNeeded = false;
+                $("#startHelp").hide();
+                $.ajax({
+                    type: "GET",
+                    url: "/loadSavedDraft",
+                    data: {
+                        draftId: id
+                    },
+                    success: function(data) {
+                        $("#startHelp").hide();
+                        stringData = data;
+                        data = JSON.parse(data);
+                        activeData = data.picks.data;
+                        $(".draft-control").show();
+                        activePackNumber = 0;
+                        loadPackData();
+                        highlightSelectedPlayer();
+                    }
+                });
+            }
 
             function hideUnseenByPlayer() {
                 $(".pack").each(function() {
