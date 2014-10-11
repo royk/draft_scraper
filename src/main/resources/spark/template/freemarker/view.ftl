@@ -127,6 +127,7 @@
             </div>
         </div>
     </div>
+    <div class="container url-container">fwefwe</div>
     <div class="container clear-top cards-container" id="cardsContainer">
 
     </div>
@@ -260,6 +261,15 @@
                         data = JSON.parse(data);
                         activeData = data.picks.data;
                         activePlayers = data.players;
+                        activeUrl = data.url;
+                        $(".cards-container").removeClass("minimal-margin");
+                        if (activeUrl) {
+                            $(".url-container").html("<a href='"+activeUrl+"' target='_blank'>Draft Viewer on Gatherer</a>");
+                            $(".url-container").show();
+                            $(".cards-container").addClass("minimal-margin");
+                        } else {
+                            $(".url-container").hide();
+                        }
                         $(".draft-control").show();
                         activePackNumber = 0;
                         loadPackData();
