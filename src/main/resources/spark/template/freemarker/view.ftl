@@ -134,6 +134,8 @@
 
     <script>
         (function() {
+            var activePlayers = null;
+            var activeUrl = "";
             var activeData = null;
             var stringData = null;
             var highlightedPlayer = 1;
@@ -257,12 +259,20 @@
                         stringData = data;
                         data = JSON.parse(data);
                         activeData = data.picks.data;
+                        activePlayers = data.players;
                         $(".draft-control").show();
                         activePackNumber = 0;
                         loadPackData();
                         highlightSelectedPlayer();
                     }
                 });
+            }
+
+            function getPlayerName(playerIndex) {
+                if (activePlayers) {
+                    return activePlayers[playerIndex];
+                }
+                return "Player "+playerIndex;
             }
 
             function hideUnseenByPlayer() {
@@ -336,7 +346,7 @@
                             currentPlayer = (i-offset)%8;
                             if (currentPlayer<0) currentPlayer+=8;
                         }
-                        var tooltipText = showTooltips? 'Player '+(currentPlayer+1)+'<br/>Pick '+(j+1)+'' : "";
+                        var tooltipText = showTooltips? getPlayerName(currentPlayer)+'<br/>Pick '+(j+1)+'' : "";
                         var cardUrl = pack[(currentPlayer+j*8)];
                         var cardName = cardUrl.split("/");
                         cardName = cardName[cardName.length-1];
