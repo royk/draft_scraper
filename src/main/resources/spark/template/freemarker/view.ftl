@@ -9,7 +9,7 @@
                 </a>
                 <ul class="dropdown-menu" id="draftSelector">
                     <li>
-                        <a href="#" data-id="7">Pro Tour Khans of Tarkir – Draft 1, Pod 19 (Oct 2014)</a>
+                        <a href="#" data-id="7">Pro Tour Khans of Tarkir, Draft 1, Pod 19 (Oct 2014)</a>
                     </li>
                     <li>
                         <a href="#" data-id="6">Pro Tour Magic 2015, Draft 1, Pod 9, M15 (Aug 2014)</a>
