@@ -14,7 +14,7 @@ Browser.drive {
     def draft = new Draft();
     int i;
     boolean playersScraped = false;
-    for (pack=1; pack<2; pack++) {
+    for (pack=1; pack<4; pack++) {
         i = 0;
         for (pick=1; pick<16; pick++) {
             for (player=1; player<9; player++) {
