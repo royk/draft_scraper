@@ -16,8 +16,8 @@ Browser.drive {
     boolean playersScraped = false;
     for (pack=1; pack<2; pack++) {
         i = 0;
-        for (pick=1; pick<2; pick++) {
-            for (player=1; player<2; player++) {
+        for (pick=1; pick<16; pick++) {
+            for (player=1; player<9; player++) {
                 go baseURL+"&player="+player+"&pack="+pack+"&pick="+pick+"&showpick=true"
                 if (!playersScraped) {
                     playersScraped = true;
