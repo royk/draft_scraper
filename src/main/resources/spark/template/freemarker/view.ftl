@@ -9,6 +9,13 @@
                 </a>
                 <ul class="dropdown-menu" id="draftSelector">
                     <li>
+                        <a href="#" data-id="10">2014 World Championship, Vintage Masters Draft, Pod 2 (Dec 2014)</a>
+                    </li>
+                    <li>
+                        <a href="#" data-id="9">2014 World Championship, Khans of Tarkir, Pod 1 (Dec 2014)</a>
+                    </li>
+
+                    <li>
                         <a href="#" data-id="8">Pro Tour Khans of Tarkir, Draft 2, Pod 1 (Oct 2014)</a>
                     </li>
                     <li>
