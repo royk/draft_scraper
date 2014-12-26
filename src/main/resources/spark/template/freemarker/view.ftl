@@ -99,6 +99,7 @@
                         <div style="margin-left: 5px;">
                             <label><input type="radio" name="cardSize" value="80"/>Small</label>
                             <label><input type="radio" name="cardSize" value="120"/>Normal</label>
+                            <label><input type="radio" name="cardSize" value="160"/>Large</label>
                         </div>
                     </li>
                     <li>
@@ -386,7 +387,8 @@
                     setTimeout(function() {
                         var $tooltip = $(".tooltip");
                         if (!$tooltip.is(":animated")) {
-                            $tooltip.animate({top: "-=15"}, 200);
+                            var moveUp = cardWidth/8;
+                            $tooltip.animate({top: "-="+moveUp}, 200);
                         }
                     }, 0);
                 });

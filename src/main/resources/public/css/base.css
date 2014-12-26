@@ -11,6 +11,7 @@
 }
 .settings-menu {
     padding-left: 5px;
+    width: 200px;
 }
 .settings-menu label{
     font-weight: normal;
