@@ -9,6 +9,9 @@
                 </a>
                 <ul class="dropdown-menu" id="draftSelector">
                     <li>
+                        <a href="#" data-id="11">Pro Tour Fate Reforged, Draft 1, Pod 46 (Feb 2015)</a>
+                    </li>
+                    <li>
                         <a href="#" data-id="10">2014 World Championship, Vintage Masters Draft, Pod 2 (Dec 2014)</a>
                     </li>
                     <li>
