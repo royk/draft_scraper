@@ -375,12 +375,16 @@
                         }
                         var tooltipText = showTooltips? getPlayerName(currentPlayer)+'<br/>Pick '+(j+1)+'' : "";
                         var cardUrl = pack[(currentPlayer+j*8)];
-                        var cardName = cardUrl.split("/");
-                        cardName = cardName[cardName.length-1];
-                        cardName = cardName.split(".")[0];
-                        cardName = cardName.replace(/_/gi, " ");
-                        var $card = $("<img alt='"+cardName+"'data-player='"+(currentPlayer+1)+"' data-toggle='tooltip' title='"+tooltipText+"' class='card card"+card+" column"+(i+1)+" pick"+(j+1)+" player"+(currentPlayer+1)+"' style='width:"+cardWidth+"px;height:"+cardHeight+";' src='"+pack[(currentPlayer+j*8)]+"'/>");
-                        $packDiv.append($card);
+                        if (cardUrl) {
+                            var cardName = cardUrl.split("/");
+                            cardName = cardName[cardName.length-1];
+                            cardName = cardName.split(".")[0];
+                            cardName = cardName.replace(/_/gi, " ");
+                            var $card = $("<img alt='"+cardName+"'data-player='"+(currentPlayer+1)+"' data-toggle='tooltip' title='"+tooltipText+"' class='card card"+card+" column"+(i+1)+" pick"+(j+1)+" player"+(currentPlayer+1)+"' style='width:"+cardWidth+"px;height:"+cardHeight+";' src='"+pack[(currentPlayer+j*8)]+"'/>");
+                            $packDiv.append($card);
+                        } else {
+                            debugger;
+                        }
                         card++;
                     }
                     offset++;
