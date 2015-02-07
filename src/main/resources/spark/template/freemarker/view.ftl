@@ -9,6 +9,9 @@
                 </a>
                 <ul class="dropdown-menu" id="draftSelector">
                     <li>
+                        <a href="#" data-id="12">Pro Tour Fate Reforged, Draft 2, Pod 2 (Feb 2015)</a>
+                    </li>
+                    <li>
                         <a href="#" data-id="11">Pro Tour Fate Reforged, Draft 1, Pod 46 (Feb 2015)</a>
                     </li>
                     <li>
