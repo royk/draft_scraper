@@ -9,6 +9,12 @@
                 </a>
                 <ul class="dropdown-menu" id="draftSelector">
                     <li>
+                        <a href="#" data-id="14">Pro Tour Dragons of Tarkir, Draft 2, Pod 4 (April 2015)</a>
+                    </li>
+                    <li>
+                        <a href="#" data-id="13">Pro Tour Dragons of Tarkir, Draft 1, Pod 29 (April 2015)</a>
+                    </li>
+                    <li>
                         <a href="#" data-id="12">Pro Tour Fate Reforged, Draft 2, Pod 2 (Feb 2015)</a>
                     </li>
                     <li>
