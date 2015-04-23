@@ -26,7 +26,22 @@ public class Main {
         get(new FreeMarkerRoute("/") {
             @Override
             public Object handle(Request request, Response response) {
-                return modelAndView(null, "view.ftl");
+                Map<String, Object> attributes = new HashMap<>();
+                String output = "";
+                try {
+                    String[] roots = new String[] { "." };
+                    GroovyScriptEngine gse = new GroovyScriptEngine(roots);
+                    Binding binding = new Binding();
+                    gse.run("src/main/groovy/script/savedDrafts.groovy", binding);
+                    Object outputObj = binding.getVariable("output");
+                    if (outputObj!=null) {
+                        output = outputObj.toString();
+                    }
+                } catch(Exception e) {
+                    output = "{error: \"unknown error: "+ ExceptionUtils.getStackTrace(e)+"\"}";
+                }
+                attributes.put("draftsData", output);
+                return modelAndView(attributes, "index.ftl");
             }
         });
         get(new Route("/view") {
