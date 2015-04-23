@@ -1,13 +1,9 @@
 .start-help {
     top: 30px;
 }
-.cards-container {
-    margin-top: 80px;
-    margin-bottom: 80px;
-    padding: 0 !important;
-}
-.cards-container.minimal-margin {
-    margin-top: 20px;
+
+.content-container {
+    margin-top: 50px;
 }
 .cards-container img {
     cursor: pointer;
@@ -22,6 +18,7 @@
     transition: box-shadow 200ms, transform 250ms ease;
     -webkit-transition: -webkit-box-shadow 200ms, -webkit-transform 250ms ease;
     -moz-transition: -moz-box-shadow 200ms, -moz-transform 250ms ease;
+    cursor: pointer;
 }
 
 .card:hover {

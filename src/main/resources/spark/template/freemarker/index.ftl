@@ -21,10 +21,11 @@
         ga('create', 'UA-55650649-1', 'auto');
         ga('send', 'pageview');
     </script>
-    <#include "scripts.ftl">
     <script>
         var draftsData = ${draftsData};
     </script>
+    <#include "scripts.ftl">
+
 </head>
 <body>
     <#include "templates.ftl">

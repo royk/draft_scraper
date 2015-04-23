@@ -1,0 +1,12 @@
+<script data-template-name="draft/view" type="text/x-handlebars">
+    <h1>{{name}}</h1>
+    {{#each booster in boosters}}
+        <div style="margin: 50px 0;">
+            {{#each card in booster.picks}}
+                <div style="display:inline-block">
+                    <img class="card" {{bind-attr src="card.src" title="card.title"}}  data-toggle='tooltip'/>
+                </div>
+            {{/each}}
+        </div>
+    {{/each}}
+</script>
