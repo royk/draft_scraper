@@ -23,6 +23,16 @@
                         </div>
                     </div>
                 </li>
+                <li>
+                    <div {{bind-attr class=":pointer boosterView::unselected"}} {{action "setView" "booster"}}>
+                        Booster View
+                    </div>
+                </li>
+                <li>
+                    <div {{bind-attr class=":pointer columnView::unselected"}} {{action "setView" "column"}}>
+                        Column View
+                    </div>
+                </li>
             </ul>
         </div>
     </div>

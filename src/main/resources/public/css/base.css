@@ -33,3 +33,14 @@
     text-align: left !important;
 }
 
+.nav li div {
+    line-height: 50px;
+    margin: 0 10px;
+}
+
+.nav li div.unselected {
+    opacity: 0.5;
+}
+.pointer {
+    cursor: pointer;
+}

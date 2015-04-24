@@ -1,4 +1,18 @@
 <script data-template-name="draft/view" type="text/x-handlebars">
+    {{#if controllers.application.boosterView}}
+        {{partial "boosterView"}}
+    {{else}}
+        {{partial "columnView"}}
+    {{/if}}
+</script>
+
+<script data-template-name="_columnView" type="text/x-handlebars">
+    {{#each card in cards}}
+        {{partial "singleCard"}}
+    {{/each}}
+</script>
+
+<script data-template-name="_boosterView" type="text/x-handlebars">
     <h1>{{name}}</h1>
     {{#each booster in boosters}}
         {{#if booster.packNumber}}
@@ -11,10 +25,14 @@
                 Booster #{{booster.number}}
             </div>
             {{#each card in booster.picks}}
-                <div style="display:inline-block">
-                    <img class="card" {{bind-attr src="card.src" title="card.title"}}  data-toggle='tooltip'/>
-                </div>
+                {{partial "singleCard"}}
             {{/each}}
         </div>
     {{/each}}
+</script>
+
+<script data-template-name="_singleCard" type="text/x-handlebars">
+    <div style="display:inline-block">
+        <img class="card" {{bind-attr src="card.src" title="card.title"}}  width="160px" data-toggle='tooltip'/>
+    </div>
 </script>
