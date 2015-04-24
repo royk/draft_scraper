@@ -17,6 +17,10 @@ App.DraftViewController = Ember.ObjectController.extend({
         for (var boosterNum=0; boosterNum<24; boosterNum++) {
             var booster = App.Booster.create();
             booster.set("picks", []);
+            booster.set("number", (boosterNum%8)+1);
+            if (boosterNum===0 || boosterNum===8 || boosterNum===16) {
+                booster.set("packNumber", boosterNum/8+1);
+            }
             boosters.push(booster);
         }
         for (var currentPack=0; currentPack<packs.length; currentPack++) {
@@ -26,7 +30,7 @@ App.DraftViewController = Ember.ObjectController.extend({
                     var card = App.Card.create();
                     card.set("src", packs[currentPack][playerNum+pickNum*8]);
                     card.set("player",  players[playerNum]);
-                    card.set("pick", pickNum);
+                    card.set("pick", pickNum+1);
                     card.set("pack", currentPack);
 
                     if (currentPack===1) {
