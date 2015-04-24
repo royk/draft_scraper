@@ -1,5 +1,6 @@
 App.DraftViewView = Ember.View.extend({
     didInsertElement: function() {
-            this.get("controller").animateCards();
+        $("#startHelp").hide();
+        this.get("controller").animateCards();
     }
 });

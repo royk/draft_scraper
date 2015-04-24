@@ -93,3 +93,8 @@
 .booster-title {
     font-size: 15px;
 }
+
+#startHelp {
+    line-height: 1.1;
+    width: 100px;
+}

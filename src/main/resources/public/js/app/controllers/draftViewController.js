@@ -87,6 +87,9 @@ App.DraftViewController = Ember.ObjectController.extend({
     onModeChange: function() {
         this.animateCards();
     }.observes("controllers.application.boosterView", "picks"),
+    init: function() {
+        this.get("controllers.application").set("startHelpNeeded", false);
+    },
     actions: {
         cardSelected: function(card) {
             $(".card-container .card").removeClass("highlight");
