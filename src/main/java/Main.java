@@ -26,7 +26,7 @@ public class Main {
         get(new FreeMarkerRoute("/") {
             @Override
             public Object handle(Request request, Response response) {
-                Map<String, Object> attributes = new HashMap<>();
+                Map<String, Object> attributes = new HashMap<String, Object>();
                 String output = "";
                 try {
                     String[] roots = new String[] { "." };
