@@ -6,6 +6,7 @@
 
 .content-container {
     margin-top: 50px;
+    width: 1280px;
 }
 .cards-container img {
     cursor: pointer;
@@ -72,5 +73,23 @@
 }
 
 .booster-container {
-    margin: 50px 0;
+    margin-bottom: 80px;
+}
+
+.cards-container {
+    font-size: 0;
+}
+.pack-container {
+    margin-bottom: 50px;
+}
+
+.pack-title,.booster-title {
+    color: #999;
+}
+.pack-title {
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+.booster-title {
+    font-size: 15px;
 }

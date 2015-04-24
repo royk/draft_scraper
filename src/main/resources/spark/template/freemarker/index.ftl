@@ -10,7 +10,7 @@
     <link href="/css/base.css" rel="stylesheet">
     <link href="/css/view.css" rel="stylesheet">
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-    <script src="/js/libs/ember.debug.js"></script>
+    <script src="/js/libs/ember-1.10.1.js"></script>
     <script src="/js/libs/ember-template-compiler.js"></script>
     <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

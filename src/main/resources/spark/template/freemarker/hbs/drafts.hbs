@@ -1,4 +1,11 @@
 <script data-template-name="draft/view" type="text/x-handlebars">
+    <h1>
+        {{#if url}}
+           <a target="_blank" {{bind-attr href=url}}>{{name}}</a>
+        {{else}}
+            {{name}}
+        {{/if}}
+    </h1>
     {{#if controllers.application.boosterView}}
         {{partial "boosterView"}}
     {{else}}
@@ -7,13 +14,20 @@
 </script>
 
 <script data-template-name="_columnView" type="text/x-handlebars">
-    {{#each card in cards}}
-        {{partial "singleCard"}}
+    {{#each pack in packs}}
+        <div class="pack-title">
+            Pack #{{pack.number}}
+        </div>
+        <div class="cards-container pack-container">
+            {{#each card in pack.cards}}
+                {{partial "singleCard"}}
+            {{/each}}
+        </div>
     {{/each}}
 </script>
 
 <script data-template-name="_boosterView" type="text/x-handlebars">
-    <h1>{{name}}</h1>
+
     {{#each booster in boosters}}
         {{#if booster.packNumber}}
             <div class="pack-title">
@@ -24,15 +38,17 @@
             <div class="booster-title">
                 Booster #{{booster.number}}
             </div>
-            {{#each card in booster.picks}}
-                {{partial "singleCard"}}
-            {{/each}}
+            <div class="cards-container">
+                {{#each card in booster.picks}}
+                    {{partial "singleCard"}}
+                {{/each}}
+            </div>
         </div>
     {{/each}}
 </script>
 
 <script data-template-name="_singleCard" type="text/x-handlebars">
-    <div style="display:inline-block">
-        <img class="card" {{bind-attr src="card.src" title="card.title"}}  width="160px" data-toggle='tooltip'/>
+    <div class="card-container" style="display:inline-block" {{action "cardSelected" card}}>
+        <img {{bind-attr class=":card card.playerClass" data-player=card.playerNum src="card.src" title="card.title"}}  width="155px" data-toggle='tooltip'/>
     </div>
 </script>
