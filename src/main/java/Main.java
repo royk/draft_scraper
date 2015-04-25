@@ -44,43 +44,6 @@ public class Main {
                 return modelAndView(attributes, "index.ftl");
             }
         });
-        get(new Route("/view") {
-            @Override
-            public Object handle(Request request, Response response) {
-                response.redirect("/");
-                return null;
-            }
-        });
-
-        get(new FreeMarkerRoute("/scrape_view") {
-            @Override
-            public Object handle(Request request, Response response) {
-                return modelAndView(null, "scrape_view.ftl");
-            }
-        });
-
-        get(new Route("/loadSavedDraft") {
-            @Override
-            public Object handle(Request request, Response response) {
-                String draftId = request.queryParams("draftId");
-                String output = "";
-                try {
-                    String[] roots = new String[] { "." };
-                    GroovyScriptEngine gse = new GroovyScriptEngine(roots);
-                    Binding binding = new Binding();
-                    binding.setVariable("draftId", Integer.parseInt(draftId));
-                    gse.run("src/main/groovy/script/savedDrafts.groovy", binding);
-                    Object outputObj = binding.getVariable("output");
-                    if (outputObj!=null) {
-                        output = outputObj.toString();
-                    }
-                } catch(Exception e) {
-                    output = "{error: \"unknown error: "+ ExceptionUtils.getStackTrace(e)+"\"}";
-                }
-                return output;
-            }
-        });
-
         get(new Route("/scrape") {
             @Override
             public Object handle(Request request, Response response) {

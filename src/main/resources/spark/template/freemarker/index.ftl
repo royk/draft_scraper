@@ -7,8 +7,8 @@
     <![endif]-->
     <script src="//code.jquery.com/jquery.js"></script>
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/css/base.css" rel="stylesheet">
-    <link href="/css/view.css" rel="stylesheet">
+    <link href="/css/base.css?ck=1" rel="stylesheet">
+    <link href="/css/view.css?ck=1" rel="stylesheet">
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
     <script src="/js/libs/ember-1.10.1.js"></script>
     <script src="/js/libs/ember-template-compiler.js"></script>
