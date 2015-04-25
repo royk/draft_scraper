@@ -23,16 +23,23 @@
                         </div>
                     </div>
                 </li>
-                <li>
-                    <div {{bind-attr class=":pointer boosterView::unselected"}} {{action "setView" "booster"}}>
-                        Booster View
-                    </div>
-                </li>
-                <li>
-                    <div {{bind-attr class=":pointer columnView::unselected"}} {{action "setView" "column"}}>
-                        Column View
-                    </div>
-                </li>
+                {{#if viewingDraft}}
+                    <li>
+                        <div {{bind-attr class=":pointer boosterView::unselected"}} {{action "setView" "booster"}}>
+                            Booster View
+                        </div>
+                    </li>
+                    <li>
+                        <div {{bind-attr class=":pointer columnView::unselected"}} {{action "setView" "column"}}>
+                            Column View
+                        </div>
+                    </li>
+                    <li>
+                        <div {{bind-attr class=":pointer playerView::unselected"}} {{action "setView" "player"}}>
+                            Player View
+                        </div>
+                    </li>
+                {{/if}}
             </ul>
         </div>
     </div>

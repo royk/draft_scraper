@@ -8,8 +8,12 @@
     </h1>
     {{#if controllers.application.boosterView}}
         {{partial "boosterView"}}
-    {{else}}
+    {{/if}}
+    {{#if controllers.application.columnView}}
         {{partial "columnView"}}
+    {{/if}}
+    {{#if controllers.application.playerView}}
+        {{partial "playerView"}}
     {{/if}}
 </script>
 
@@ -24,6 +28,14 @@
             {{/each}}
         </div>
     {{/each}}
+</script>
+
+<script data-template-name="_playerView" type="text/x-handlebars">
+    <div class="cards-container pack-container">
+        {{#each card in playerPicksOrdered}}
+            {{partial "singleCard"}}
+        {{/each}}
+    </div>
 </script>
 
 <script data-template-name="_boosterView" type="text/x-handlebars">

@@ -70,6 +70,19 @@ App.DraftViewController = Ember.ObjectController.extend({
     cards: null,
     playersData: null,
     packs: null,
+    playerPicksOrdered: function() {
+        // sort players picks for the player view display (row x is players' x pick)
+        var cards = [];
+        var players = this.get("playersData");
+        for (var currentPack=0; currentPack<3; currentPack++) {
+            for (var pickNum=0; pickNum<15; pickNum++) {
+                for (var playerNum=0; playerNum<8; playerNum++) {
+                    cards.push(players[playerNum].get("picks")[15*currentPack+pickNum]);
+                }
+            }
+        }
+        return cards;
+    }.property("playersData"),
     animateCards: function() {
         Ember.run.scheduleOnce('afterRender', this, function() {
             $("img").tooltip({placement: "top", html: true}).mouseover(function() {
@@ -86,7 +99,7 @@ App.DraftViewController = Ember.ObjectController.extend({
     },
     onModeChange: function() {
         this.animateCards();
-    }.observes("controllers.application.boosterView", "picks"),
+    }.observes("controllers.application.viewModeChanged", "picks"),
     init: function() {
         this.get("controllers.application").set("startHelpNeeded", false);
     },

@@ -2,7 +2,13 @@ App.ApplicationController = Ember.Controller.extend({
     drafts: [],
     boosterView: true,
     columnView: false,
+    playerView: false,
     startHelpNeeded: true,
+    viewModeChanged: false,
+    viewingDraft: false,
+    onPathChange: function() {
+        this.set("viewingDraft", this.get("currentPath")==="draft.view");
+    }.observes("currentPath"),
     init: function() {
         this._super();
         this.set("drafts", drafts);
@@ -16,6 +22,8 @@ App.ApplicationController = Ember.Controller.extend({
         setView: function(mode) {
             this.set("boosterView", mode==="booster");
             this.set("columnView", mode==="column");
+            this.set("playerView", mode==="player");
+            this.toggleProperty("viewModeChanged");
         }
     }
 });
