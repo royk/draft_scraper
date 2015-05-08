@@ -38,6 +38,11 @@
     margin: 0 10px;
 }
 
+.nav li div label {
+    font-weight: normal;
+    cursor: pointer;
+}
+
 .nav li div.unselected {
     opacity: 0.5;
 }

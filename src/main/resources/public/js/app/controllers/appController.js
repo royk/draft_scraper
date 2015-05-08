@@ -6,6 +6,7 @@ App.ApplicationController = Ember.Controller.extend({
     startHelpNeeded: true,
     viewModeChanged: false,
     viewingDraft: false,
+    isGameMode: false,
     onPathChange: function() {
         this.set("viewingDraft", this.get("currentPath")==="draft.view");
     }.observes("currentPath"),
@@ -24,6 +25,13 @@ App.ApplicationController = Ember.Controller.extend({
             this.set("columnView", mode==="column");
             this.set("playerView", mode==="player");
             this.toggleProperty("viewModeChanged");
+        },
+        selectDraft: function(draft) {
+            if (this.get("isGameMode")) {
+                this.transitionToRoute("draft.game", draft);
+            } else {
+                this.transitionToRoute("draft.view", draft);
+            }
         }
     }
 });
