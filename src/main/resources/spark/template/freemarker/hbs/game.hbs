@@ -1,3 +1,33 @@
 <script data-template-name="draft/game" type="text/x-handlebars">
+    {{#unless isGameOver}}
+        <h1>Your score: {{score}}</h1>
 
+        <div class="cards-container booster-container">
+            {{#each card in selectedBoosterShuffledPicks}}
+                {{partial "singleGameCard"}}
+            {{/each}}
+        </div>
+
+    {{else}}
+        <h1>Your final score: {{score}}</h1>
+        <div style="margin-top: 20px;"></div>
+        <h2>
+            <div class="pointer"  style="text-decoration: underline;" {{action "startGame"}}>
+                Try again
+            </div>
+        </h2>
+    {{/unless}}
+    <h2>Picked cards</h2>
+    <div class="cards-container booster-container picked-cards">
+        {{#each card in pickedCards}}
+            {{partial "singleGameCard"}}
+        {{/each}}
+    </div>
+
+</script>
+
+<script data-template-name="_singleGameCard" type="text/x-handlebars">
+    <div class="card-container" style="display:inline-block" {{action "cardSelected" card}}>
+        <img {{bind-attr class=":card" src="card.src"}}  width="155px"/>
+    </div>
 </script>

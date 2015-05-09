@@ -9,6 +9,11 @@ App.ApplicationController = Ember.Controller.extend({
     isGameMode: false,
     onPathChange: function() {
         this.set("viewingDraft", this.get("currentPath")==="draft.view");
+        this.set("isGameMode", this.get("currentPath")==="draft.game");
+        $("#startHelp").hide();
+        if (this.get("currentPath").indexOf("draft")>-1) {
+            this.set("startHelpNeeded", false);
+        }
     }.observes("currentPath"),
     init: function() {
         this._super();
