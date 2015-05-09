@@ -20,7 +20,7 @@
     <h2>Picked cards</h2>
     <div class="cards-container booster-container picked-cards">
         {{#each card in pickedCards}}
-            {{partial "singleGameCard"}}
+            {{partial "singleGamePreviewCard"}}
         {{/each}}
     </div>
 
@@ -28,6 +28,12 @@
 
 <script data-template-name="_singleGameCard" type="text/x-handlebars">
     <div class="card-container" style="display:inline-block" {{action "cardSelected" card}}>
+        <img {{bind-attr class=":card" src="card.src"}}  width="155px"/>
+    </div>
+</script>
+
+<script data-template-name="_singleGamePreviewCard" type="text/x-handlebars">
+    <div class="card-container" style="display:inline-block">
         <img {{bind-attr class=":card" src="card.src"}}  width="155px"/>
     </div>
 </script>
