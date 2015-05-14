@@ -6,6 +6,8 @@ App.DraftGameController = App.DraftAnalyzerControllerBase.extend({
     pickedCards: [],
     selectedBoosterShuffledPicks: [],
     score: 0,
+    correctGuesses: 0,
+    pointsPerPick: [10, 14, 14, 12, 12, 10, 10, 8, 8, 6, 6, 4, 4, 2, 0],
     isGameOver: false,
     selectedBoosterShuffled: function() {
         var picks = this.get("selectedBooster.picks");
@@ -34,6 +36,7 @@ App.DraftGameController = App.DraftAnalyzerControllerBase.extend({
             this.set("isGameOver", false);
             this.set("currentPick", 0);
             this.set("score", 0);
+            this.set("correctGuesses", 0);
             this.set("pickedCards", []);
             // pick a pack one booster randomly. Make sure it's not one we already played
             var playedBoosters = this.get("playedBoosters").slice();
@@ -64,7 +67,8 @@ App.DraftGameController = App.DraftAnalyzerControllerBase.extend({
             for (var i=0; i<selectedBooster.picks.length; i++) {
                 if (card.src===selectedBooster.picks[i].src) {
                     if (this.get("currentPick")===i) {
-                        this.set("score", this.get("score")+1);
+                        this.set("score", this.get("score")+this.get("pointsPerPick")[i]);
+                        this.set("correctGuesses", this.get("correctGuesses")+1);
                     } else {
                     }
                     break;
