@@ -1,12 +1,12 @@
-<script src="/js/app/app.js"></script>
-<script src="/js/app/router.js"></script>
+<script src="/js/app/app.js?ck=1"></script>
+<script src="/js/app/router.js?ck=1"></script>
 
-<script src="/js/app/controllers/appController.js"></script>
-<script src="/js/app/controllers/draftAnalyzerControllerBase.js"></script>
-<script src="/js/app/controllers/draftViewController.js"></script>
-<script src="/js/app/controllers/draftGameController.js"></script>
+<script src="/js/app/controllers/appController.js?ck=1"></script>
+<script src="/js/app/controllers/draftAnalyzerControllerBase.js?ck=1"></script>
+<script src="/js/app/controllers/draftViewController.js?ck=1"></script>
+<script src="/js/app/controllers/draftGameController.js?ck=1"></script>
 
-<script src="/js/app/views/draftViewView.js"></script>
-<script src="/js/app/views/draftGameView.js"></script>
+<script src="/js/app/views/draftViewView.js?ck=1"></script>
+<script src="/js/app/views/draftGameView.js?ck=1"></script>
 
-<script src="/js/app/models/draftModel.js"></script>
+<script src="/js/app/models/draftModel.js?ck=1"></script>
