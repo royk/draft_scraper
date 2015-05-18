@@ -63,6 +63,14 @@ App.DraftGameController = App.DraftAnalyzerControllerBase.extend({
 
         },
         cardSelected: function(card) {
+            $.ajax({
+                url: "/savePick",
+                type: "PUT",
+                data: JSON.stringify({
+                    card: "test",
+                    pick: this.get("currentPick")
+                })
+            });
             var selectedBooster = this.get("boosters")[this.get("selectedBoosterNum")];
             for (var i=0; i<selectedBooster.picks.length; i++) {
                 if (card.src===selectedBooster.picks[i].src) {

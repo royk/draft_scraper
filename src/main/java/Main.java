@@ -1,5 +1,8 @@
 import static spark.Spark.*;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.mongodb.*;
 import groovy.lang.Binding;
 import groovy.lang.GroovyClassLoader;
 import groovy.lang.GroovyObject;
@@ -11,6 +14,7 @@ import spark.template.freemarker.FreeMarkerRoute;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,6 +26,10 @@ public class Main {
         if (StringUtils.isBlank(port)) {
             port = LOCAL_PORT;
         }
+        MongoCredential credential = MongoCredential.createCredential(Conf.MONGODB_USER, Conf.MONGODB_DB, Conf.MONGODB_PASS);
+
+        MongoClient mongoClient = new MongoClient(new ServerAddress(Conf.MONGODB_URL, Conf.MONGODB_PORT), Arrays.asList(credential));
+        final DB db = mongoClient.getDB(Conf.MONGODB_DB);
         setPort(Integer.parseInt(port));
         get(new FreeMarkerRoute("/") {
             @Override
@@ -63,6 +71,22 @@ public class Main {
                     output = "{error: \"unknown error: "+ ExceptionUtils.getStackTrace(e)+"\"}";
                 }
                 return output;
+            }
+        });
+        put(new Route("/savePick") {
+            @Override
+            public Object handle(Request request, Response response) {
+                JsonObject data = new JsonParser().parse(request.body()).getAsJsonObject();
+                String cardKey = data.getAsJsonPrimitive("card").getAsString();
+                String cardValue = data.getAsJsonPrimitive("pick").getAsString();
+                DBObject searchQuery = new BasicDBObject();
+                searchQuery.put("cardKey", cardKey);
+                searchQuery.put("pick", cardValue);
+                DBObject modifiedObject = new BasicDBObject();
+                modifiedObject.put("$inc", new BasicDBObject().append("hits", 1));
+                DBCollection coll = db.getCollection("cardStatistics");
+                coll.update(searchQuery, modifiedObject,true,false);
+                return null;
             }
         });
 
