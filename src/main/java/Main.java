@@ -73,20 +73,48 @@ public class Main {
                 return output;
             }
         });
+        get(new Route("/getStatistics") {
+
+            @Override
+            public Object handle(Request request, Response response) {
+                String draftId = request.queryMap("draftId").value();
+                DBCollection coll = db.getCollection("cardStatistics");
+                DBObject query = new BasicDBObject("draftId", draftId);
+                DBCursor cursor = coll.find(query);
+                JsonObject resultJson = new JsonObject();
+
+                try {
+                    while (cursor.hasNext()) {
+                        DBObject card = cursor.next();
+                        String pick = card.get("pick").toString();
+                        if (!resultJson.has(pick)) {
+                            resultJson.add(pick, new JsonObject());
+                        }
+                        JsonObject pickObj = resultJson.getAsJsonObject(pick);
+                        pickObj.addProperty(card.get("cardKey").toString(), Integer.parseInt(card.get("hits").toString()));
+                    }
+                } finally {
+                    cursor.close();
+                }
+                return resultJson.toString();
+            }
+        });
         put(new Route("/savePick") {
             @Override
             public Object handle(Request request, Response response) {
                 JsonObject data = new JsonParser().parse(request.body()).getAsJsonObject();
                 String cardKey = data.getAsJsonPrimitive("card").getAsString();
                 String cardValue = data.getAsJsonPrimitive("pick").getAsString();
+                String draftId = data.getAsJsonPrimitive("draftId").getAsString();
                 DBObject searchQuery = new BasicDBObject();
                 searchQuery.put("cardKey", cardKey);
                 searchQuery.put("pick", cardValue);
+                searchQuery.put("draftId", draftId);
                 DBObject modifiedObject = new BasicDBObject();
                 modifiedObject.put("$inc", new BasicDBObject().append("hits", 1));
                 DBCollection coll = db.getCollection("cardStatistics");
                 coll.update(searchQuery, modifiedObject,true,false);
-                return null;
+                return response;
             }
         });
 

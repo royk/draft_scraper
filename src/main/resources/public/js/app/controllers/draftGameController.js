@@ -9,6 +9,40 @@ App.DraftGameController = App.DraftAnalyzerControllerBase.extend({
     correctGuesses: 0,
     pointsPerPick: [10, 14, 14, 12, 12, 10, 10, 8, 8, 6, 6, 4, 4, 2, 0],
     isGameOver: false,
+    pickStatsData: [],
+    getCardPickPercentage: function(pick, card) {
+        var data = this.get("pickStatsData");
+        if (data && data.hasOwnProperty(pick) && data[pick].hasOwnProperty(card.dbKey)) {
+            data = data[pick];
+            var totalPicks = 0;
+            for (var k in data) {
+                if (data.hasOwnProperty(k)) {
+                    totalPicks += data[k];
+                }
+            }
+            return (data[card.dbKey]/totalPicks)*100;
+        }
+        return 0;
+    },
+    onDraftChanged: function() {
+        var id = this.get("id");
+        if (id) {
+            $.ajax({
+                url: "/getStatistics?draftId="+this.get("id"),
+                type: "GET",
+                success: (function(data) {
+                    if (data) {
+                        try {
+                            this.set("pickStatsData", JSON.parse(data));
+                        } catch(e) {
+
+                        }
+                    }
+                }).bind(this)
+            });
+        }
+
+    }.observes("id"),
     selectedBoosterShuffled: function() {
         var picks = this.get("selectedBooster.picks");
         var shuffledBooster = [];
@@ -62,13 +96,16 @@ App.DraftGameController = App.DraftAnalyzerControllerBase.extend({
             this.set("selectedBooster", this.get("boosters")[boosterNum]);
 
         },
+
         cardSelected: function(card) {
             $.ajax({
                 url: "/savePick",
                 type: "PUT",
                 data: JSON.stringify({
-                    card: "test",
-                    pick: this.get("currentPick")
+                    card: card.dbKey,
+                    pick: this.get("currentPick"),
+                    draftId: this.get("id")
+
                 })
             });
             var selectedBooster = this.get("boosters")[this.get("selectedBoosterNum")];
@@ -89,6 +126,7 @@ App.DraftGameController = App.DraftAnalyzerControllerBase.extend({
                 this.set("isGameOver", true);
             }
             var newPickedCards = this.get("pickedCards").slice();
+            selectedCard.set("pickedAt", this.get("currentPick")-1);
             newPickedCards.push(selectedCard);
             // move to the next booster and remove n picks from it
             var nextBoosterNum = (this.get("selectedBoosterNum")-1)%8;
@@ -103,6 +141,9 @@ App.DraftGameController = App.DraftAnalyzerControllerBase.extend({
             this.set("selectedBooster", {picks:nextBooster});
             this.set("selectedBoosterNum", nextBoosterNum);
             this.set("pickedCards", newPickedCards);
+        },
+        getStats: function(card) {
+            console.log(this.getCardPickPercentage(card.pickedAt, card));
         }
     }
 });

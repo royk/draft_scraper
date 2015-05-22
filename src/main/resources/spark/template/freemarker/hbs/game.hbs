@@ -33,7 +33,7 @@
 </script>
 
 <script data-template-name="_singleGamePreviewCard" type="text/x-handlebars">
-    <div class="card-container" style="display:inline-block">
+    <div class="card-container" style="display:inline-block" {{action "getStats" card}}>
         <img {{bind-attr class=":card" src="card.src"}}  width="155px"/>
     </div>
 </script>

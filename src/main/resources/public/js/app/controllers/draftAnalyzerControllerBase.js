@@ -41,7 +41,7 @@ App.DraftAnalyzerControllerBase = Ember.ObjectController.extend({
                     card.set("playerNum",  playerNum);
                     card.set("pick", pickNum+1);
                     card.set("pack", currentPack);
-
+                    card.set("dbKey", this.getCardDBKey(card));
                     if (currentPack===1) {
                         boosterNum = (playerNum+pickNum)%8;
                     } else {
@@ -52,6 +52,7 @@ App.DraftAnalyzerControllerBase = Ember.ObjectController.extend({
                     }
                     boosterNum = boosterNum+currentPack*8;
                     card.set("booster", boosters[boosterNum]);
+                    card.set("boosterNum", boosterNum);
                     boosters[boosterNum].get("picks").push(card);
                     players[playerNum].get("picks").push(card);
                     card.set("title", card.get("player.name")+"<br/>Pick "+card.get("pick"));
@@ -68,5 +69,8 @@ App.DraftAnalyzerControllerBase = Ember.ObjectController.extend({
     boosters: null,
     cards: null,
     playersData: null,
-    packs: null
+    packs: null,
+    getCardDBKey: function(card) {
+        return this.get("id")+"_"+card.pack+"_"+card.boosterNum+"_"+card.pick;
+    }
 });
