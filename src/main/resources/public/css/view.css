@@ -98,3 +98,33 @@
     line-height: 1.1;
     width: 100px;
 }
+
+.modal {
+    text-align: center;
+}
+
+.modal:before {
+    display: inline-block;
+    vertical-align: middle;
+    content: " ";
+    height: 100%;
+}
+
+.modal-dialog {
+    display: inline-block;
+    text-align: left;
+    vertical-align: middle;
+}
+.modal-header {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.modal-body .modal-row>div {
+    display: inline-block;
+    width: 49%;
+    text-align: center;
+}
+.modal-footer .stat{
+    float: left;
+}

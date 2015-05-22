@@ -23,7 +23,34 @@
             {{partial "singleGamePreviewCard"}}
         {{/each}}
     </div>
+    <div class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    {{modalHeader}}
+                </div>
+                <div class="modal-body">
+                    <div class="modal-row">
+                        <div>You guessed:</div>
+                        <div>The drafter chose:</div>
+                    </div>
+                    <div class="modal-row">
+                        <div>
+                            <img {{bind-attr class=":card" src="guessedCard.src"}}  width="155px"/>
+                        </div>
+                        <div>
+                            <img {{bind-attr class=":card" src="correctCard.src"}}  width="155px"/>
+                        </div>
+                    </div>
 
+                </div>
+                <div class="modal-footer">
+                    <div class="stat">{{pickPercentage}}% of the people guessed like you did</div>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Continue</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </script>
 
 <script data-template-name="_singleGameCard" type="text/x-handlebars">

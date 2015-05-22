@@ -83,6 +83,17 @@ App.DraftGameController = App.DraftAnalyzerControllerBase.extend({
             this.send("startGame");
         });
     }.observes("picks"),
+    getModalHeader: function(guessedCorrectly) {
+        if (guessedCorrectly) {
+            return "Correct pick!"
+        } else {
+            return "Sorry, you guessed wrong :(";
+        }
+    },
+    modalHeader: "",
+    selectedCard: null,
+    guessedCard: null,
+    pickPercentage: 0,
     actions: {
         startGame: function() {
             this.set("isGameOver", false);
@@ -117,6 +128,8 @@ App.DraftGameController = App.DraftAnalyzerControllerBase.extend({
 
         cardSelected: function(card) {
             var pickPercentage = this.getCardPickPercentage(this.get("currentPick"), card);
+            this.set("guessedCard", card);
+            this.set("pickPercentage", pickPercentage);
             $.ajax({
                 url: "/savePick",
                 type: "PUT",
@@ -127,10 +140,12 @@ App.DraftGameController = App.DraftAnalyzerControllerBase.extend({
 
                 })
             });
+            var guessedCorrectly = false;
             var selectedBooster = this.get("boosters")[this.get("selectedBoosterNum")];
             for (var i=0; i<selectedBooster.picks.length; i++) {
                 if (card.src===selectedBooster.picks[i].src) {
                     if (this.get("currentPick")===i) {
+                        guessedCorrectly = true;
                         this.set("score", this.get("score")+this.get("pointsPerPick")[i]);
                         this.set("correctGuesses", this.get("correctGuesses")+1);
                     } else {
@@ -158,6 +173,9 @@ App.DraftGameController = App.DraftAnalyzerControllerBase.extend({
             for (var i=0; i<this.get("currentPick"); i++) {
                 nextBooster.shift();
             }
+            this.set("correctCard", selectedCard);
+            this.set("modalHeader", this.getModalHeader(guessedCorrectly));
+            $('.modal').modal('show');
             this.set("selectedBooster", {picks:nextBooster});
             this.set("selectedBoosterNum", nextBoosterNum);
             this.set("pickedCards", newPickedCards);
