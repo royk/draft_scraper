@@ -11,6 +11,24 @@ App.DraftGameController = App.DraftAnalyzerControllerBase.extend({
     isGameOver: false,
     pickStatsData: [],
     getCardPickPercentage: function(pick, card) {
+        function round(value, exp) {
+            if (typeof exp === 'undefined' || +exp === 0)
+                return Math.round(value);
+
+            value = +value;
+            exp  = +exp;
+
+            if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0))
+                return NaN;
+
+            // Shift
+            value = value.toString().split('e');
+            value = Math.round(+(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp)));
+
+            // Shift back
+            value = value.toString().split('e');
+            return +(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp));
+        }
         var data = this.get("pickStatsData");
         if (data && data.hasOwnProperty(pick) && data[pick].hasOwnProperty(card.dbKey)) {
             data = data[pick];
@@ -20,7 +38,7 @@ App.DraftGameController = App.DraftAnalyzerControllerBase.extend({
                     totalPicks += data[k];
                 }
             }
-            return (data[card.dbKey]/totalPicks)*100;
+            return round((data[card.dbKey]/totalPicks)*100, 2);
         }
         return 0;
     },
@@ -98,6 +116,7 @@ App.DraftGameController = App.DraftAnalyzerControllerBase.extend({
         },
 
         cardSelected: function(card) {
+            var pickPercentage = this.getCardPickPercentage(this.get("currentPick"), card);
             $.ajax({
                 url: "/savePick",
                 type: "PUT",
@@ -127,6 +146,7 @@ App.DraftGameController = App.DraftAnalyzerControllerBase.extend({
             }
             var newPickedCards = this.get("pickedCards").slice();
             selectedCard.set("pickedAt", this.get("currentPick")-1);
+
             newPickedCards.push(selectedCard);
             // move to the next booster and remove n picks from it
             var nextBoosterNum = (this.get("selectedBoosterNum")-1)%8;
@@ -141,9 +161,6 @@ App.DraftGameController = App.DraftAnalyzerControllerBase.extend({
             this.set("selectedBooster", {picks:nextBooster});
             this.set("selectedBoosterNum", nextBoosterNum);
             this.set("pickedCards", newPickedCards);
-        },
-        getStats: function(card) {
-            console.log(this.getCardPickPercentage(card.pickedAt, card));
         }
     }
 });
