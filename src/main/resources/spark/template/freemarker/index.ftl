@@ -6,9 +6,10 @@
         <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
     <script src="//code.jquery.com/jquery.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/css/base.css?ck=2" rel="stylesheet">
-    <link href="/css/view.css?ck=2" rel="stylesheet">
+    <link href="/css/base.css?ck=3" rel="stylesheet">
+    <link href="/css/view.css?ck=3" rel="stylesheet">
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
     <script src="/js/libs/ember-1.10.1.js"></script>
     <script src="/js/libs/ember-template-compiler.js"></script>

@@ -6,16 +6,35 @@ App.ApplicationController = Ember.Controller.extend({
     startHelpNeeded: true,
     viewModeChanged: false,
     viewingDraft: false,
+    viewingGame: false,
     isGameMode: false,
+    showModeToggler: true,
+    showNewsPopup: false,
+    latestNews: [
+        "Pick statistics shown in Training mode",
+        "Added Training mode"
+    ],
+    latestNewsSeen: 0,
+    hasNews: function() {
+        return this.get("latestNews").length;
+    }.property("latestNews"),
     onPathChange: function() {
         this.set("viewingDraft", this.get("currentPath")==="draft.view");
-        this.set("isGameMode", this.get("currentPath")==="draft.game");
+        this.set("viewingGame", this.get("currentPath")==="draft.game");
+        this.set("showModeToggler", !this.get("viewingDraft") && !this.get("viewingGame"));
         $("#startHelp").hide();
         if (this.get("currentPath").indexOf("draft")>-1) {
             this.set("startHelpNeeded", false);
         }
     }.observes("currentPath"),
     init: function() {
+        var latestNewsSeen = $.cookie("p1p1_newsSeen");
+        this.set("latestNewsSeen", latestNewsSeen ? parseInt(latestNewsSeen, 10) : 0);
+        $.cookie("p1p1_newsSeen", this.get("latestNews").length);
+        while (latestNewsSeen) {
+            latestNewsSeen--;
+            this.get("latestNews").pop();
+        }
         this._super();
         this.set("drafts", drafts);
         setTimeout((function() {
@@ -37,6 +56,12 @@ App.ApplicationController = Ember.Controller.extend({
             } else {
                 this.transitionToRoute("draft.view", draft);
             }
+        },
+        toggleNewsPopup: function() {
+            this.toggleProperty("showNewsPopup");
+        },
+        setGameMode: function(on) {
+            this.set("isGameMode", on);
         }
     }
 });

@@ -39,15 +39,32 @@
                             Player View
                         </div>
                     </li>
-                {{else}}
+                {{/if}}
+                {{#if showModeToggler}}
                     <li>
                         <div>
-                            {{input type="checkbox" name="gameMode" checked=isGameMode id="gameModeCB"}}
-                            <label for="gameModeCB">Draft game mode</label>
+                            <button {{bind-attr class=":btn :btn-game-mode isGameMode:btn-default:btn-success"}} {{action "setGameMode" false}} title="View pick order from competitive drafts. Which cards are the best in the set?">Learn</button>
+                            <button {{bind-attr class=":btn :btn-game-mode isGameMode:btn-success:btn-default"}} {{action "setGameMode" true}} title="Face the same picks and dilemmas a pro faced. Can you guess what they picked?">Train</button>
                         </div>
                     </li>
                 {{/if}}
             </ul>
+            {{#if hasNews}}
+                <div class="news-tag">
+                    <div class="news-tag-inner pointer" {{action "toggleNewsPopup"}}>
+                        New content! Click to see
+                    </div>
+                    <div {{bind-attr class="showNewsPopup::display-none :news-popup"}}>
+                        <ul>
+                            {{#each newsLine in latestNews}}
+                                <li>
+                                    {{newsLine}}
+                                </li>
+                            {{/each}}
+                        </ul>
+                    </div>
+                </div>
+            {{/if}}
         </div>
     </nav>
     <div class="container content-container">

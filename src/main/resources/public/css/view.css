@@ -128,3 +128,42 @@
 .modal-footer .stat{
     float: left;
 }
+.news-tag {
+    float: right;
+    padding-top: 11px;
+    position: relative;
+}
+
+.news-tag-inner {
+    padding: 5px;
+    border: 1px solid rgba(168, 159, 0, 0.53);
+    border-radius: 5px;
+    background: #FFFDD5;
+}
+
+.news-popup {
+    position: absolute;
+    width: 300px;
+    left: 0;
+    top: 60px;
+    padding: 5px;
+    border: 1px solid rgba(168, 159, 0, 0.53);
+    border-radius: 5px;
+    background: #FFFDD5;
+}
+
+.news-popup ul {
+    padding-left: 25px;
+    margin-bottom: 0;
+}
+.news-popup li {
+    padding-bottom: 5px;
+}
+
+.news-popup li:last-of-type {
+    padding-bottom: 0;
+}
+
+.btn-game-mode {
+    margin-right: 10px;
+}
