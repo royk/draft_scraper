@@ -1,5 +1,6 @@
 <script data-template-name="draft/game" type="text/x-handlebars">
     {{#unless isGameOver}}
+        {{currentPlayer.name}}
         <h1>Your score: {{score}}</h1>
 
         <div class="cards-container booster-container">
@@ -9,7 +10,7 @@
         </div>
 
     {{else}}
-        <h1>Your final score: {{score}} (got {{correctGuesses}} / 15)</h1>
+        <h1>Your final score: {{score}} (got {{correctGuesses}} / {{totalGuesses}})</h1>
         <div style="margin-top: 20px;"></div>
         <h2>
             <div class="pointer"  style="text-decoration: underline;" {{action "startGame"}}>

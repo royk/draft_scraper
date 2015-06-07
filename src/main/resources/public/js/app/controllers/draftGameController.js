@@ -144,6 +144,7 @@ App.DraftGameController = App.DraftAnalyzerControllerBase.extend({
         },
 
         cardSelected: function(card) {
+			this.set("totalGuesses", this.get("totalGuesses")+1);
             var pickPercentage = this.getCardPickPercentage(this.get("currentPick"), card);
             this.set("guessedCard", card);
             this.set("pickPercentage", pickPercentage);
