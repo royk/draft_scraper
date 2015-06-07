@@ -30,7 +30,6 @@ App.DraftAnalyzerControllerBase = Ember.ObjectController.extend({
             pack.set("cards", [120]);
             pack.set("number", currentPack+1);
             packsData.push(pack);
-
             var boosterNum;
             for (var pickNum=0; pickNum<15; pickNum++) {
                 for (var playerNum=0; playerNum<8; playerNum++) {

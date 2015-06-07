@@ -1,5 +1,6 @@
 import static spark.Spark.*;
 
+import com.google.common.base.Strings;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mongodb.*;
@@ -26,10 +27,17 @@ public class Main {
         if (StringUtils.isBlank(port)) {
             port = LOCAL_PORT;
         }
-        MongoCredential credential = MongoCredential.createCredential(Conf.MONGODB_USER, Conf.MONGODB_DB, Conf.MONGODB_PASS);
-
-        MongoClient mongoClient = new MongoClient(new ServerAddress(Conf.MONGODB_URL, Conf.MONGODB_PORT), Arrays.asList(credential));
-        final DB db = mongoClient.getDB(Conf.MONGODB_DB);
+        DB _db = null;
+        try {
+            if (!Strings.isNullOrEmpty(Conf.MONGODB_USER)) {
+                MongoCredential credential = MongoCredential.createCredential(Conf.MONGODB_USER, Conf.MONGODB_DB, Conf.MONGODB_PASS);
+                MongoClient mongoClient = new MongoClient(new ServerAddress(Conf.MONGODB_URL, Conf.MONGODB_PORT), Arrays.asList(credential));
+                _db = mongoClient.getDB(Conf.MONGODB_DB);
+            }
+        } catch(Exception e) {
+            // no mongoDB. whatevs.
+        }
+        final DB db = _db;
         setPort(Integer.parseInt(port));
         get(new FreeMarkerRoute("/") {
             @Override
@@ -77,43 +85,48 @@ public class Main {
 
             @Override
             public Object handle(Request request, Response response) {
-                String draftId = request.queryMap("draftId").value();
-                DBCollection coll = db.getCollection("cardStatistics");
-                DBObject query = new BasicDBObject("draftId", draftId);
-                DBCursor cursor = coll.find(query);
-                JsonObject resultJson = new JsonObject();
+                if (db!=null) {
+                    String draftId = request.queryMap("draftId").value();
+                    DBCollection coll = db.getCollection("cardStatistics");
+                    DBObject query = new BasicDBObject("draftId", draftId);
+                    DBCursor cursor = coll.find(query);
+                    JsonObject resultJson = new JsonObject();
 
-                try {
-                    while (cursor.hasNext()) {
-                        DBObject card = cursor.next();
-                        String pick = card.get("pick").toString();
-                        if (!resultJson.has(pick)) {
-                            resultJson.add(pick, new JsonObject());
+                    try {
+                        while (cursor.hasNext()) {
+                            DBObject card = cursor.next();
+                            String pick = card.get("pick").toString();
+                            if (!resultJson.has(pick)) {
+                                resultJson.add(pick, new JsonObject());
+                            }
+                            JsonObject pickObj = resultJson.getAsJsonObject(pick);
+                            pickObj.addProperty(card.get("cardKey").toString(), Integer.parseInt(card.get("hits").toString()));
                         }
-                        JsonObject pickObj = resultJson.getAsJsonObject(pick);
-                        pickObj.addProperty(card.get("cardKey").toString(), Integer.parseInt(card.get("hits").toString()));
+                    } finally {
+                        cursor.close();
                     }
-                } finally {
-                    cursor.close();
+                    return resultJson.toString();
                 }
-                return resultJson.toString();
+                return "no statistics available";
             }
         });
         put(new Route("/savePick") {
             @Override
             public Object handle(Request request, Response response) {
-                JsonObject data = new JsonParser().parse(request.body()).getAsJsonObject();
-                String cardKey = data.getAsJsonPrimitive("card").getAsString();
-                String cardValue = data.getAsJsonPrimitive("pick").getAsString();
-                String draftId = data.getAsJsonPrimitive("draftId").getAsString();
-                DBObject searchQuery = new BasicDBObject();
-                searchQuery.put("cardKey", cardKey);
-                searchQuery.put("pick", cardValue);
-                searchQuery.put("draftId", draftId);
-                DBObject modifiedObject = new BasicDBObject();
-                modifiedObject.put("$inc", new BasicDBObject().append("hits", 1));
-                DBCollection coll = db.getCollection("cardStatistics");
-                coll.update(searchQuery, modifiedObject,true,false);
+                if (db!=null) {
+                    JsonObject data = new JsonParser().parse(request.body()).getAsJsonObject();
+                    String cardKey = data.getAsJsonPrimitive("card").getAsString();
+                    String cardValue = data.getAsJsonPrimitive("pick").getAsString();
+                    String draftId = data.getAsJsonPrimitive("draftId").getAsString();
+                    DBObject searchQuery = new BasicDBObject();
+                    searchQuery.put("cardKey", cardKey);
+                    searchQuery.put("pick", cardValue);
+                    searchQuery.put("draftId", draftId);
+                    DBObject modifiedObject = new BasicDBObject();
+                    modifiedObject.put("$inc", new BasicDBObject().append("hits", 1));
+                    DBCollection coll = db.getCollection("cardStatistics");
+                    coll.update(searchQuery, modifiedObject, true, false);
+                }
                 return response;
             }
         });

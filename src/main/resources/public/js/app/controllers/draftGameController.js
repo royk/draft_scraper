@@ -1,5 +1,8 @@
 App.DraftGameController = App.DraftAnalyzerControllerBase.extend({
+	statisticsAvailable: true,
     currentPick: 0,
+    currentPack: 0,
+	currentPlayer: 0,
     selectedBooster: null,
     selectedBoosterNum: -1,
     playedBoosters: [],
@@ -53,9 +56,11 @@ App.DraftGameController = App.DraftAnalyzerControllerBase.extend({
                         try {
                             this.set("pickStatsData", JSON.parse(data));
                         } catch(e) {
-
+							this.set("statisticsAvailable", false);
                         }
-                    }
+                    } else {
+						this.set("statisticsAvailable", false);
+					}
                 }).bind(this)
             });
         }
@@ -101,28 +106,37 @@ App.DraftGameController = App.DraftAnalyzerControllerBase.extend({
             this.set("score", 0);
             this.set("correctGuesses", 0);
             this.set("pickedCards", []);
-            // pick a pack one booster randomly. Make sure it's not one we already played
-            var playedBoosters = this.get("playedBoosters").slice();
-            var boosterNum = 0;
-            var found = true;
-            do {
-                found = true;
-                boosterNum = Math.floor(Math.random()*8);
-                for (var i=0; i<playedBoosters.length; i++) {
-                    if (playedBoosters[i]===boosterNum) {
-                        found = false;
-                        break;
-                    }
-                }
+			this.send("loadNextBooster");
+        },
+		loadNextBooster: function() {
+            // If this is pack one, pick a random booster. Make sure it's one we didn't play yet
+			// otherwise, pick the correct pack of the current player.
+			var boosterNum = 0;
+			if (this.get("currentPack")===0) {
+				var playedBoosters = this.get("playedBoosters").slice();
+				var found = true;
+				do {
+					found = true;
+					boosterNum = Math.floor(Math.random() * 8);
+					for (var i = 0; i < playedBoosters.length; i++) {
+						if (playedBoosters[i] === boosterNum) {
+							found = false;
+							break;
+						}
+					}
 
-            } while(found===false);
-            playedBoosters.push(boosterNum);
-            if (playedBoosters.length===8) {
-                playedBoosters = [];
-            }
-            this.set("playedBoosters", playedBoosters);
-            this.set("selectedBoosterNum", boosterNum);
-            this.set("selectedBooster", this.get("boosters")[boosterNum]);
+				} while (found === false);
+				playedBoosters.push(boosterNum);
+				if (playedBoosters.length === 8) {
+					playedBoosters = [];
+				}
+				this.set("playedBoosters", playedBoosters);
+				this.set("currentPlayer", this.get("players")[boosterNum]);
+			} else {
+
+			}
+			this.set("selectedBoosterNum", boosterNum);
+			this.set("selectedBooster", this.get("boosters")[boosterNum]);
 
         },
 
@@ -157,6 +171,7 @@ App.DraftGameController = App.DraftAnalyzerControllerBase.extend({
             var selectedCard = selectedBooster.picks[this.get("currentPick")];
             this.set("currentPick", this.get("currentPick")+1);
             if (this.get("currentPick")===15) {
+				//this.send("nextBooster");
                 this.set("isGameOver", true);
             }
             var newPickedCards = this.get("pickedCards").slice();
@@ -179,6 +194,7 @@ App.DraftGameController = App.DraftAnalyzerControllerBase.extend({
             this.set("selectedBooster", {picks:nextBooster});
             this.set("selectedBoosterNum", nextBoosterNum);
             this.set("pickedCards", newPickedCards);
+
         }
     }
 });

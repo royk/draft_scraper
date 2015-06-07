@@ -8,7 +8,7 @@
 public class Conf {
     public static String MONGODB_DB = System.getenv("MONGODB_DB");
     public static String MONGODB_USER = System.getenv("MONGODB_USER");
-    public static char[] MONGODB_PASS = System.getenv("MONGODB_PASS").toCharArray();
+    public static char[] MONGODB_PASS = System.getenv("MONGODB_PASS")!=null ? System.getenv("MONGODB_PASS").toCharArray() : null;
     public static String MONGODB_URL = System.getenv("MONGODB_URL");
-    public static Integer MONGODB_PORT = Integer.parseInt(System.getenv("MONGODB_PORT"));
+    public static Integer MONGODB_PORT = System.getenv("MONGODB_PORT")!=null ? Integer.parseInt(System.getenv("MONGODB_PORT")) : 0;
 }

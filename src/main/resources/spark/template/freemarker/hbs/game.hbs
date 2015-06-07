@@ -45,7 +45,9 @@
 
                 </div>
                 <div class="modal-footer">
-                    <div class="stat">{{pickPercentage}}% of the people guessed like you did</div>
+                    {{#if statisticsAvailable}}
+                        <div class="stat">{{pickPercentage}}% of the people guessed like you did</div>
+                    {{/if}}
                     <button type="button" class="btn btn-default" data-dismiss="modal">Continue</button>
                 </div>
             </div>
