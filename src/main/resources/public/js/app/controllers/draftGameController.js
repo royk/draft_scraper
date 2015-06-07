@@ -105,6 +105,7 @@ App.DraftGameController = App.DraftAnalyzerControllerBase.extend({
             this.set("isGameOver", false);
             this.set("score", 0);
             this.set("correctGuesses", 0);
+			this.set("pickedCards", []);
 			this.send("loadNextBooster");
         },
 		loadNextBooster: function() {
@@ -112,7 +113,7 @@ App.DraftGameController = App.DraftAnalyzerControllerBase.extend({
 			// otherwise, pick the correct pack of the current player.
 			var boosterNum = 0;
 			this.set("currentPick", 0);
-			this.set("pickedCards", []);
+
 			if (this.get("currentPack")===0) {
 				var playedBoosters = this.get("playedBoosters").slice();
 				var found = true;
@@ -200,7 +201,7 @@ App.DraftGameController = App.DraftAnalyzerControllerBase.extend({
             this.set("selectedBoosterNum", nextBoosterNum);
             this.set("pickedCards", newPickedCards);
 			if (this.get("currentPick")===15) {
-				if (this.get("currentPack")===3) {
+				if (this.get("currentPack")>=2) {
 					this.set("isGameOver", true);
 				} else {
 					this.set("currentPack", this.get("currentPack")+1);
