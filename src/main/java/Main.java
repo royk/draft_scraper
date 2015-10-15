@@ -7,6 +7,8 @@ import groovy.lang.Binding;
 import groovy.util.GroovyScriptEngine;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import spark.*;
 import spark.template.freemarker.FreeMarkerRoute;
 import utils.Mailer;
@@ -19,6 +21,7 @@ import java.util.Map;
 public class Main {
     private static String LOCAL_PORT = "4567";
     private static Mailer mailer = new Mailer();
+    static final Logger LOG = LoggerFactory.getLogger(Main.class);
     public static void main(String[] args) {
         staticFileLocation("/public");
         String port = System.getenv("PORT");
@@ -125,6 +128,7 @@ public class Main {
                 Map<String, Object> attributes = new HashMap<String, Object>();
                 attributes.put("email", email);
                 try {
+                    LOG.warn("Sending email using ["+System.getenv("EMAIL_USER")+"]");
                     mailer.sendMail("roeiklein@gmail.com", "P1P1 - someone registered for updates!", new ModelAndView(attributes, "mails/updatesRequest.ftl"));
                 } catch(Exception e) {
 
