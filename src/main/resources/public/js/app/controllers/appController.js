@@ -10,6 +10,8 @@ App.ApplicationController = Ember.Controller.extend({
     isGameMode: false,
     showModeToggler: true,
     showNewsPopup: false,
+    notifyEmailInvalid: false,
+    emailSaved: false,
     latestNews: [
         "Added Pro Tour Origins Drafts",
         "Pick statistics shown in Training mode",
@@ -63,6 +65,19 @@ App.ApplicationController = Ember.Controller.extend({
         },
         setGameMode: function(on) {
             this.set("isGameMode", on);
+        },
+        notifyMeOnChanges: function() {
+            function validateEmail(email) {
+                var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+                return re.test(email);
+            }
+            this.set("notifyEmailInvalid", false);
+            var email = this.get("notifyEmailAddress");
+            if (validateEmail(email)) {
+                this.set("emailSaved", true);
+            } else {
+                this.set("notifyEmailInvalid", true);
+            }
         }
     }
 });

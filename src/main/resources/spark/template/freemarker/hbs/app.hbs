@@ -62,6 +62,22 @@
                                 </li>
                             {{/each}}
                         </ul>
+                        <hr/>
+
+                        <div class="email-updates-form">
+                            {{#if emailSaved}}
+                                <div>
+                                    <small>Email registered succesfully.</small>
+                                </div>
+                            {{else}}
+                                {{input value=notifyEmailAddress placeholder="Your email address" classBinding="notifyEmailInvalid:error"}}
+                                <button class="btn btn-success" {{action "notifyMeOnChanges"}}>Get updates to email</button>
+                                <div>
+                                    <small>Disclaimer: We will send emails on important site changes only. We will never spam.</small>
+                                </div>
+                            {{/if}}
+
+                        </div>
                     </div>
                 </div>
             {{/if}}

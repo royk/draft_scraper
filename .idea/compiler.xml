@@ -27,6 +27,8 @@
         <module name="draft_scraper" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="draft_scraper" target="1.5" />
+    </bytecodeTargetLevel>
   </component>
 </project>
-

@@ -164,6 +164,22 @@
     padding-bottom: 0;
 }
 
+.email-updates-form > * {
+    margin: 5px;
+}
+.email-updates-form input {
+    border: 1px solid #aaaaaa;
+    border-radius: 4px;
+    padding: 5px;
+}
+.email-updates-form input.error {
+    border: 2px solid red;
+}
+
+.email-updates-form small {
+    font-style: italic;
+}
+
 .btn-game-mode {
     margin-right: 10px;
 }
