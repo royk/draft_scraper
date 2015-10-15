@@ -11,6 +11,7 @@ import spark.*;
 import spark.template.freemarker.FreeMarkerRoute;
 import utils.Mailer;
 
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -135,6 +136,7 @@ public class Main {
 
             @Override
             public Object handle(Request request, Response response) {
+                String email = URLDecoder.decode(request.body().split("=")[1]);
                 return "ok";
             }
         });

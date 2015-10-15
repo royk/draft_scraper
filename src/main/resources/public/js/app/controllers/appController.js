@@ -74,6 +74,7 @@ App.ApplicationController = Ember.Controller.extend({
             this.set("notifyEmailInvalid", false);
             var email = this.get("notifyEmailAddress");
             if (validateEmail(email)) {
+                $.post("/notifyMe", {email: email});
                 this.set("emailSaved", true);
             } else {
                 this.set("notifyEmailInvalid", true);
