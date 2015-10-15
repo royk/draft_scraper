@@ -4,32 +4,30 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mongodb.*;
 import groovy.lang.Binding;
-import groovy.lang.GroovyClassLoader;
-import groovy.lang.GroovyObject;
 import groovy.util.GroovyScriptEngine;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import spark.*;
 import spark.template.freemarker.FreeMarkerRoute;
+import utils.Mailer;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Main {
     private static String LOCAL_PORT = "4567";
+    private static Mailer mailer = new Mailer();
     public static void main(String[] args) {
         staticFileLocation("/public");
         String port = System.getenv("PORT");
         if (StringUtils.isBlank(port)) {
             port = LOCAL_PORT;
         }
-        MongoCredential credential = MongoCredential.createCredential(Conf.MONGODB_USER, Conf.MONGODB_DB, Conf.MONGODB_PASS);
+//        MongoCredential credential = MongoCredential.createCredential(utils.Conf.MONGODB_USER, utils.Conf.MONGODB_DB, utils.Conf.MONGODB_PASS);
 
-        MongoClient mongoClient = new MongoClient(new ServerAddress(Conf.MONGODB_URL, Conf.MONGODB_PORT), Arrays.asList(credential));
-        final DB db = mongoClient.getDB(Conf.MONGODB_DB);
+//        MongoClient mongoClient = new MongoClient(new ServerAddress(utils.Conf.MONGODB_URL, utils.Conf.MONGODB_PORT), Arrays.asList(credential));
+//        final DB db = mongoClient.getDB(utils.Conf.MONGODB_DB);
+        final DB db = null;
         setPort(Integer.parseInt(port));
         get(new FreeMarkerRoute("/") {
             @Override
@@ -115,6 +113,29 @@ public class Main {
                 DBCollection coll = db.getCollection("cardStatistics");
                 coll.update(searchQuery, modifiedObject,true,false);
                 return response;
+            }
+        });
+
+        get(new Route("/testMail") {
+
+            @Override
+            public Object handle(Request request, Response response) {
+                Map<String, Object> attributes = new HashMap<String, Object>();
+                attributes.put("test", "value");
+                try {
+                    mailer.sendMail("roeiklein@gmail.com", "This is a test", new ModelAndView(attributes, "mails/mailTest.ftl"));
+                } catch(Exception e) {
+                    return "Error";
+                }
+                return "OK";
+            }
+        });
+
+        post(new Route("/notifyMe") {
+
+            @Override
+            public Object handle(Request request, Response response) {
+                return "ok";
             }
         });
 
