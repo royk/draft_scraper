@@ -12,6 +12,7 @@ import spark.template.freemarker.FreeMarkerRoute;
 import utils.Mailer;
 
 import java.net.URLDecoder;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,11 +25,10 @@ public class Main {
         if (StringUtils.isBlank(port)) {
             port = LOCAL_PORT;
         }
-//        MongoCredential credential = MongoCredential.createCredential(utils.Conf.MONGODB_USER, utils.Conf.MONGODB_DB, utils.Conf.MONGODB_PASS);
+        MongoCredential credential = MongoCredential.createCredential(utils.Conf.MONGODB_USER, utils.Conf.MONGODB_DB, utils.Conf.MONGODB_PASS);
 
-//        MongoClient mongoClient = new MongoClient(new ServerAddress(utils.Conf.MONGODB_URL, utils.Conf.MONGODB_PORT), Arrays.asList(credential));
-//        final DB db = mongoClient.getDB(utils.Conf.MONGODB_DB);
-        final DB db = null;
+        MongoClient mongoClient = new MongoClient(new ServerAddress(utils.Conf.MONGODB_URL, utils.Conf.MONGODB_PORT), Arrays.asList(credential));
+        final DB db = mongoClient.getDB(utils.Conf.MONGODB_DB);
         setPort(Integer.parseInt(port));
         get(new FreeMarkerRoute("/") {
             @Override
@@ -117,26 +117,18 @@ public class Main {
             }
         });
 
-        get(new Route("/testMail") {
-
-            @Override
-            public Object handle(Request request, Response response) {
-                Map<String, Object> attributes = new HashMap<String, Object>();
-                attributes.put("test", "value");
-                try {
-                    mailer.sendMail("roeiklein@gmail.com", "This is a test", new ModelAndView(attributes, "mails/mailTest.ftl"));
-                } catch(Exception e) {
-                    return "Error";
-                }
-                return "OK";
-            }
-        });
-
         post(new Route("/notifyMe") {
 
             @Override
             public Object handle(Request request, Response response) {
                 String email = URLDecoder.decode(request.body().split("=")[1]);
+                Map<String, Object> attributes = new HashMap<String, Object>();
+                attributes.put("email", email);
+                try {
+                    mailer.sendMail("roeiklein@gmail.com", "P1P1 - someone registered for updates!", new ModelAndView(attributes, "mails/updatesRequest.ftl"));
+                } catch(Exception e) {
+
+                }
                 return "ok";
             }
         });
