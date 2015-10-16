@@ -5,6 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>draft_scraper</groupId>
     <artifactId>draft_scraper</artifactId>
+    <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <properties>
         <jetty.version>9.0.2.v20130417</jetty.version>
@@ -19,6 +20,10 @@
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
+        </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
         </repository>
     </repositories>
     <dependencies>
@@ -97,7 +102,11 @@
             <artifactId>javax.mail</artifactId>
             <version>1.5.4</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.github.royk</groupId>
+            <artifactId>SparkMail</artifactId>
+            <version>0.0.1</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

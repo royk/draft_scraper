@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import spark.*;
 import spark.template.freemarker.FreeMarkerRoute;
-import utils.Mailer;
 
 import java.net.URLDecoder;
 import java.util.Arrays;
@@ -20,7 +19,7 @@ import java.util.Map;
 
 public class Main {
     private static String LOCAL_PORT = "4567";
-    private static Mailer mailer = new Mailer();
+    private static SparkMail mailer = new SparkMail(System.getenv("EMAIL_USER"), System.getenv("EMAIL_PWD"));
     static final Logger LOG = LoggerFactory.getLogger(Main.class);
     public static void main(String[] args) {
         staticFileLocation("/public");
@@ -129,9 +128,8 @@ public class Main {
                 attributes.put("email", email);
                 try {
                     LOG.warn("Sending email using ["+System.getenv("EMAIL_USER")+"]");
-                    mailer.sendMail("roeiklein@gmail.com", "P1P1 - someone registered for updates!", new ModelAndView(attributes, "mails/updatesRequest.ftl"));
+                    mailer.sendMail("roeiklein@gmail.com", "roeiklein@gmail.com", "P1P1 - someone registered for updates!", new ModelAndView(attributes, "mails/updatesRequest.ftl"));
                 } catch(Exception e) {
-
                 }
                 return "ok";
             }
