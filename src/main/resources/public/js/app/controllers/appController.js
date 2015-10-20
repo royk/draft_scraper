@@ -13,7 +13,7 @@ App.ApplicationController = Ember.Controller.extend({
     notifyEmailInvalid: false,
     emailSaved: false,
     latestNews: [
-        "Added Pro Tour Battle For Zendikar first draft",
+        "Added Pro Tour Battle For Zendikar Drafts",
         "Added World Championship 2015 Drafts",
         "Added Pro Tour Origins Drafts",
         "Pick statistics shown in Training mode",
