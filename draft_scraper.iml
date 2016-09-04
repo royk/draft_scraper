@@ -7,6 +7,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
+      <excludeFolder url="file://$MODULE_DIR$/.idea" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="jdk" jdkName="1.8" jdkType="JavaSDK" />
@@ -83,5 +84,6 @@
     <orderEntry type="library" name="Maven: javax.mail:javax.mail-api:1.5.4" level="project" />
     <orderEntry type="library" name="Maven: javax.activation:activation:1.1" level="project" />
     <orderEntry type="library" name="Maven: com.sun.mail:javax.mail:1.5.4" level="project" />
+    <orderEntry type="library" name="Maven: com.github.royk:SparkMail:0.0.1" level="project" />
   </component>
 </module>

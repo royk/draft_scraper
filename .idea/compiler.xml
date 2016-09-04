@@ -25,10 +25,12 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
         <module name="draft_scraper" />
+        <module name="SparkMail" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="draft_scraper" target="1.5" />
+      <module name="SparkMail" target="1.5" />
     </bytecodeTargetLevel>
   </component>
 </project>
